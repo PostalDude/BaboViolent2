@@ -633,19 +633,27 @@ void Server::recvPacket(char * buffer, int typeID, unsigned long bbnetID)
 			// Est-ce que ce player existe
 			if (game->players[teamRequest.playerID])
 			{
+				bool bDontSwitch = false;
 				char oldTeam = game->players[teamRequest.playerID]->teamID;
-				char newTeam = game->assignPlayerTeam(teamRequest.playerID, teamRequest.teamRequested);
-				if (newTeam != oldTeam)
+				
+				
+				 
+				if ((!bDontSwitch))
 				{
-					if ((oldTeam == PLAYER_TEAM_RED || oldTeam == PLAYER_TEAM_BLUE) &&
-						(game->players[teamRequest.playerID]->timePlayedCurGame > EPSILON))
+					char newTeam = game->assignPlayerTeam(teamRequest.playerID, teamRequest.teamRequested);
+					if (newTeam != oldTeam)
 					{
-						cacheStats(game->players[teamRequest.playerID], oldTeam);
-						game->players[teamRequest.playerID]->reinit();
+					
+						if ((oldTeam == PLAYER_TEAM_RED || oldTeam == PLAYER_TEAM_BLUE) &&
+							(game->players[teamRequest.playerID]->timePlayedCurGame > EPSILON))
+						{
+							cacheStats(game->players[teamRequest.playerID], oldTeam);
+							game->players[teamRequest.playerID]->reinit();
+						}
+						teamRequest.teamRequested = newTeam;
+						// On l'envoit �tout le monde, (si � chang�
+						bb_serverSend((char*)&teamRequest, sizeof(net_clsv_svcl_team_request), NET_CLSV_SVCL_TEAM_REQUEST, 0);
 					}
-					teamRequest.teamRequested = newTeam;
-					// On l'envoit �tout le monde, (si � chang�
-					bb_serverSend((char*)&teamRequest, sizeof(net_clsv_svcl_team_request), NET_CLSV_SVCL_TEAM_REQUEST, 0);
 				}
 			}
 			break;
@@ -765,6 +773,15 @@ void Server::recvPacket(char * buffer, int typeID, unsigned long bbnetID)
 						spawn += game->players[spawnRequest.playerID]->teamID;
 
 						console->add( spawn );
+						
+						// Force autobalancing
+						if (game->gameType == GAME_TYPE_SQUIRREL)
+						{
+							if (game->players[spawnRequest.playerID]->teamID == PLAYER_TEAM_RED)
+							{
+								bForceAutoBalance = true;
+							}
+						}
 					}
 					else
 					{

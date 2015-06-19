@@ -341,6 +341,21 @@ void Game::renderStats()
 				}
 				renderSpectator(spectatorTeam, vPos);
 				break;
+			case GAME_TYPE_SQUIRREL:
+				renderStatsSlice(CVector4f(0, 0, 0, .75f), gameVar.lang_playerNameC.s, "Kills", "Death", "Damage", "", "", gameVar.lang_pingC.s, vPos);
+				vPos += 10;
+				if (blueScore >= redScore)
+				{
+					renderBlueTeam(blueTeam, vPos);
+					renderRedTeam(redTeam, vPos);
+				}
+				else
+				{
+					renderRedTeam(redTeam, vPos);
+					renderBlueTeam(blueTeam, vPos);
+				}
+				renderSpectator(spectatorTeam, vPos);
+				break;
 			}
 
 			blueTeam.clear();

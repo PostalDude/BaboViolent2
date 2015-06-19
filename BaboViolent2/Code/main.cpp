@@ -55,10 +55,10 @@ char * bbNetVersion;
 
 #ifdef CONSOLE
 bool quit = false;
-void dkwForceQuit()
+/*void dkwForceQuit()
 {
 	quit = true;
-}
+}*/
 #else
 CVector2i mousePos_xbox;
 CVector2f mousePos_xboxVel;

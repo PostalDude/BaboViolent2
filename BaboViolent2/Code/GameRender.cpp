@@ -386,6 +386,7 @@ void Game::render()
 
 				// Lui on a pas le choix de l'afficher vu que ça fait parti du gameplay
 #ifdef _PRO_
+			if (gameType == GAME_TYPE_SQUIRREL) map->renderBombMark();
 #else
             if (gameType == GAME_TYPE_SND) map->renderBombMark();
 #endif
@@ -783,7 +784,9 @@ void Game::renderMiniMap()
 											switch (players[i]->teamID)
 											{
 											case PLAYER_TEAM_BLUE:glColor3f(0,1,1);break;
-											case PLAYER_TEAM_RED:glColor3f(1,1,0);break;
+											case PLAYER_TEAM_RED:
+												glColor3f(1, 1, 0);
+												break;
 											}
 										}
 										else
@@ -791,7 +794,16 @@ void Game::renderMiniMap()
 											switch (players[i]->teamID)
 											{
 											case PLAYER_TEAM_BLUE:glColor3f(players[i]->firedShowDelay*.35f,players[i]->firedShowDelay*.35f,1);break;
-											case PLAYER_TEAM_RED:glColor3f(1,players[i]->firedShowDelay*.35f,players[i]->firedShowDelay*.35f);break;
+											case PLAYER_TEAM_RED:
+												if (gameType == GAME_TYPE_SQUIRREL)
+												{
+													glColor3f(1, 0, 0);
+												}
+												else
+												{
+													glColor3f(1, players[i]->firedShowDelay*.35f, players[i]->firedShowDelay*.35f);
+												}
+												break;
 											}
 										}
 										glBegin(GL_QUADS);

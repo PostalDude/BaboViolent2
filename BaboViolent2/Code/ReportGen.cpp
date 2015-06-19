@@ -106,6 +106,8 @@ void ReportGen::genInfo(TiXmlElement* element)
 			type = new TiXmlText("CTF");
 		else if (scene->server->game->gameType == GAME_TYPE_SND)
 			type = new TiXmlText("SND");
+		else if (scene->server->game->gameType == GAME_TYPE_SQUIRREL)
+			type = new TiXmlText("SQU");
 		if (type != 0)
 			gameMode->LinkEndChild(type);
 		gameInfo->LinkEndChild(gameMode);
@@ -138,7 +140,7 @@ void ReportGen::genInfo(TiXmlElement* element)
 void ReportGen::genTeams(TiXmlElement* element)
 {
 	int gt = scene->server->game->gameType;
-	if (gt == GAME_TYPE_CTF || gt == GAME_TYPE_TDM)
+	if (gt == GAME_TYPE_CTF || gt == GAME_TYPE_TDM || gt == GAME_TYPE_SQUIRREL)
 	{
 		TiXmlElement* teams = new TiXmlElement("teams");
 

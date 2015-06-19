@@ -1740,6 +1740,7 @@ bool IsMapValid(const Map & map, int gameType)
 	//--- game type specific map-check
 	switch(gameType)
 	{
+	case GAME_TYPE_SQUIRREL:
 	case GAME_TYPE_DM: 
 	case GAME_TYPE_TDM:
 		// there must be at least 1 item in dm_spawns

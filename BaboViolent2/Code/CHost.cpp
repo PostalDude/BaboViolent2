@@ -226,10 +226,10 @@ CHost::CHost(CControl * in_parent, CControl * in_alignTo)
 		txt_password->password = true;
 
 		//--- Game type
-		label1 = new CControl(instance, CVector2i(10,10), CVector2i(150,120),"Game type:", this, "LABEL", label1, CONTROL_SNAP_BOTTOM);
+		label1 = new CControl(instance, CVector2i(10, 10), CVector2i(150, 160), "Game type:", this, "LABEL", label1, CONTROL_SNAP_BOTTOM);
 		label1->textAlign = CONTROL_TEXTALIGN_MIDDLERIGHT;
 		label1->toolTips = "Choose a game type for your game.";
-		lst_gameType = new CControl(instance, CVector2i(10,10), CVector2i(200,120),"", this, "LISTBOX", label1, CONTROL_SNAP_RIGHT);
+		lst_gameType = new CControl(instance, CVector2i(10, 10), CVector2i(200, 160), "", this, "LISTBOX", label1, CONTROL_SNAP_RIGHT);
 			CControl * item = new CControl(lst_gameType, CVector2i(10,10), CVector2i(150,20),"Free for all", this, "LABEL");
 			item->toolTips = "No teams, everyone against all the others.\nThe player with the more kills wins.";
 			item = new CControl(lst_gameType, CVector2i(10,10), CVector2i(150,20),"Team deathmatch", this, "LABEL", item, CONTROL_SNAP_BOTTOM);
@@ -242,6 +242,9 @@ CHost::CHost(CControl * in_parent, CControl * in_alignTo)
 			item = new CControl(lst_gameType, CVector2i(10,10), CVector2i(150,20),"Champion", this, "LABEL", item, CONTROL_SNAP_BOTTOM);
 			item->toolTips = "1v1 Duel your way to the top!.";
 #endif
+		item = new CControl(lst_gameType, CVector2i(10, 10), CVector2i(150, 20), "Squirrel", this, "LABEL", item, CONTROL_SNAP_BOTTOM);
+		item->toolTips = "1 vs all Kill the squirrel.";
+
 		lst_gameType->selectChild(gameVar.sv_gameType);
 
 

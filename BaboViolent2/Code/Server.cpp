@@ -38,6 +38,7 @@
 //
 Server::Server(Game * pGame): maxTimeOverMaxPing(5.0f)//, maxIdleTime(180.0f)
 {
+	bForceAutoBalance = false;
 	game = pGame;
 	game->isServerGame = true;
 #ifndef CONSOLE
@@ -959,6 +960,24 @@ void Server::update(float delay)
 
 			}
 
+			// Le mode Squirrel
+			if (game->gameType == GAME_TYPE_SQUIRREL)
+			{
+				//*** Red team in squirrel mode is the squirrel team.
+				// On check si on attein pas les max de score
+				if (game->redWin >= gameVar.sv_winLimit && gameVar.sv_winLimit > 0)
+				{
+					game->roundState = GAME_RED_WIN;
+					changeRoundState = true;
+				}
+				
+				if (game->gameTimeLeft == 0 && gameVar.sv_gameTimeLimit > 0)
+				{
+					game->roundState = GAME_DRAW;
+					changeRoundState = true;					
+				}
+			}
+
 			if (changeRoundState)
 			{
 				if (gameVar.sv_report && (game->roundState == GAME_RED_WIN ||
@@ -1226,6 +1245,50 @@ void Server::update(float delay)
 			// On check pour les flag
 			if (game)
 			{
+				if (game->gameType == GAME_TYPE_SQUIRREL)
+				{
+					if (autoBalanceTimer == 0)
+					{
+						//--- Count how much player in each team
+						std::vector<Player*> reds;
+						std::vector<Player*> blues;
+						for (int i = 0; i < MAX_PLAYER; ++i)
+						{
+							if (game->players[i])
+							{
+								if (game->players[i]->teamID == PLAYER_TEAM_RED)
+								{
+									reds.push_back(game->players[i]);
+								}
+								else if (game->players[i]->teamID == PLAYER_TEAM_BLUE)
+								{
+									blues.push_back(game->players[i]);
+								}
+							}
+						}
+
+						if (bForceAutoBalance ||
+							((reds.size() == 0) || (reds.size() > 1)))
+						{
+							bForceAutoBalance = false;
+
+							//--- Send autobalance notification
+							autoBalanceTimer = (float)1;
+							autoBalance();
+							//bb_serverSend(0, 0, NET_SVCL_AUTOBALANCE, 0);
+						}
+					}
+					else
+					{
+						bForceAutoBalance = false;
+						autoBalanceTimer -= delay;
+						if (autoBalanceTimer < 0)
+						{
+							autoBalanceTimer = 0;
+						}
+					}
+				}
+
 				//--- Run the auto balance au 2mins
 				if ((game->gameType == GAME_TYPE_TDM || game->gameType == GAME_TYPE_CTF) &&
 					gameVar.sv_autoBalance)
@@ -1289,6 +1352,10 @@ void Server::update(float delay)
 				else if (game->map && game->gameType == GAME_TYPE_CTF)
 				{
 					updateCTF(delay);
+				}
+				else if (game->map && game->gameType == GAME_TYPE_SQUIRREL)
+				{
+					//***
 				}
 				else if (game->map && game->gameType == GAME_TYPE_SND)
 				{
@@ -1412,6 +1479,50 @@ bool Server::filterMapFromRotation(const mapInfo & map)
 //
 void Server::autoBalance()
 {
+	if (game->gameType == GAME_TYPE_SQUIRREL)
+	{
+		std::vector<Player*> reds;
+		std::vector<Player*> blues;
+		for (int i = 0; i<MAX_PLAYER; ++i)
+		{
+			if (game->players[i])
+			{
+				if (game->players[i]->teamID == PLAYER_TEAM_RED)
+				{
+					reds.push_back(game->players[i]);
+				}
+				else if (game->players[i]->teamID == PLAYER_TEAM_BLUE)
+				{
+					blues.push_back(game->players[i]);
+				}
+			}
+		}
+
+		if (blues.size() > 0)
+		{
+			int blueToRedID = (rand() % blues.size());
+
+			if (reds.size() > 0)
+			{
+				for (int a = 0; a < reds.size(); ++a)
+				{
+					reds[a]->teamID = game->assignPlayerTeam(reds[a]->playerID, PLAYER_TEAM_BLUE);
+					net_clsv_svcl_team_request teamRequest;
+					teamRequest.playerID = reds[a]->playerID;
+					teamRequest.teamRequested = PLAYER_TEAM_BLUE;
+					bb_serverSend((char*)&teamRequest, sizeof(net_clsv_svcl_team_request), NET_CLSV_SVCL_TEAM_REQUEST, 0);
+				}
+			}
+
+			blues[blueToRedID]->teamID = game->assignPlayerTeam(blues[blueToRedID]->playerID, PLAYER_TEAM_RED);
+			net_clsv_svcl_team_request teamRequest;
+			teamRequest.playerID = blues[blueToRedID]->playerID;
+			teamRequest.teamRequested = PLAYER_TEAM_RED;
+			bb_serverSend((char*)&teamRequest, sizeof(net_clsv_svcl_team_request), NET_CLSV_SVCL_TEAM_REQUEST, 0);
+		}
+		return;
+	}
+
 	//--- Voil� on autobalance les teams
 	std::vector<Player*> reds;
 	std::vector<Player*> blues;

@@ -293,6 +293,7 @@ void Player::kill(bool silenceDeath)
 		}
 	}
 	currentCF.position.set(-999,-999,0);
+	
 }
 
 
@@ -495,7 +496,14 @@ void Player::render()
 				{
 					if(teamID == PLAYER_TEAM_RED)
 					{
-						glColor3f(1, 0, 0);
+						if (game->gameType == GAME_TYPE_SQUIRREL)
+						{
+							glColor3f(1, 1, 0);
+						}
+						else
+						{
+							glColor3f(1, 0, 0);
+						}
 					}
 					else if(teamID == PLAYER_TEAM_BLUE)
 					{
@@ -769,9 +777,18 @@ void Player::updateSkin()
 		{
 		case PLAYER_TEAM_RED:
 			{
-				redDecalT.set(1,.5f,.5f);
-				greenDecalT.set(1,.0f,.0f);
-				blueDecalT.set(.5f,0,0);
+				if (game->gameType == GAME_TYPE_SQUIRREL)
+				{
+					redDecalT.set(1, .5f, .5f);
+					greenDecalT.set(1, .0f, .0f);
+					blueDecalT.set(.5f, 0, 0);
+				}
+				else
+				{
+					redDecalT.set(1, .5f, .5f);
+					greenDecalT.set(1, .0f, .0f);
+					blueDecalT.set(.5f, 0, 0);
+				}
 				break;
 			}
 		case PLAYER_TEAM_BLUE:
@@ -1004,7 +1021,7 @@ void Player::hit(Weapon * fromWeapon, Player * from, float damage)
 					scene->client->eventMessages.push_back(TimedMessage(message));
 				}
 				kill(false);
-				if(game->gameType == GAME_TYPE_TDM)
+				if ((game->gameType == GAME_TYPE_TDM) || (game->gameType == GAME_TYPE_SQUIRREL))
 				{
 					if (from->teamID == PLAYER_TEAM_BLUE)
 						game->blueScore--;
@@ -1311,6 +1328,12 @@ void Player::hitSV(Weapon * fromWeapon, Player * from, float damage)
 					}
 				}
 				kill(true);
+
+				if (game->gameType == GAME_TYPE_SQUIRREL)
+				{
+							
+				}
+
 				if (game->gameType == GAME_TYPE_DM && from != this) 
 				{
 					if (from->teamID == PLAYER_TEAM_BLUE)
@@ -1328,7 +1351,7 @@ void Player::hitSV(Weapon * fromWeapon, Player * from, float damage)
 				}
 				else 
 				{
-					if(game->gameType == GAME_TYPE_TDM)
+					if ((game->gameType == GAME_TYPE_TDM) || (game->gameType == GAME_TYPE_SQUIRREL))
 					{
 						if (from->teamID == PLAYER_TEAM_BLUE)
 						{

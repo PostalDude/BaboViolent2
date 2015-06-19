@@ -247,6 +247,7 @@ public:
 	// how long player has been idle
 	float timeIdle;
 
+
 	//--- Si ce joueur est admin.
 	//    � veut dire quil peut envoyer des commandes au server.
 	//    Et tout les messages server vont lui �re envoy�
@@ -295,7 +296,7 @@ public:
 	float dmg;
 	int kills;
 	int deaths;
-	int score;
+	int score; // Score in squirrel: 1 point per second
 	int	returns;
 	int damage;
 	int flagAttempts;

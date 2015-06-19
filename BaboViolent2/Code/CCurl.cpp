@@ -21,8 +21,8 @@
 #include "md5.h"
 #include <sstream>
 #include <fstream>
-using std::min;
-using std::max;
+//using std::min;
+//using std::max;
 
 // Could be changed to dynamically allocate
 // but for now this is enough for 40 friends

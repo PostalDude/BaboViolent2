@@ -122,6 +122,9 @@ GameVar::GameVar()
 	langs.push_back(SLangText("lang_championD", &lang_championD));
 #endif
 
+	langs.push_back(SLangText("lang_squirrelC", &lang_squirrelC));
+	langs.push_back(SLangText("lang_squirrelD", &lang_squirrelD));
+
 	langs.push_back(SLangText("lang_connectingC", &lang_connectingC));
 	langs.push_back(SLangText("lang_pressF10ToCancel", &lang_pressF10ToCancel));
 
@@ -372,8 +375,8 @@ GameVar::GameVar()
 		&sv_spawnType, 0, 1, LIMIT_MIN | LIMIT_MAX, true);
 
 	sv_gameType = 1;
-	dksvarRegister(CString("sv_gameType [int : 0=Deathmatch, 1=Team Deathmatch, 2=Capture The Flag, 3=Champion]"),
-		&sv_gameType, 0, 3, LIMIT_MIN | LIMIT_MAX, true);
+	dksvarRegister(CString("sv_gameType [int : 0=Deathmatch, 1=Team Deathmatch, 2=Capture The Flag, 3=Champion, 4=Squirrel]"),
+		&sv_gameType, 0, 4, LIMIT_MIN | LIMIT_MAX, true);
 
 	sv_subGameType = 0;
 	dksvarRegister(CString("sv_subGameType [int : 0=Normal, 1=Instagib, 2=RandomWeapon]"),

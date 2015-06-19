@@ -205,7 +205,7 @@ bool Game::spawnPlayer(int playerID)
 #endif
 
 			// On lui trouve une place libre loin des ennemies
-         if (gameType == GAME_TYPE_DM)
+		 if ((gameType == GAME_TYPE_DM) || (gameType == GAME_TYPE_SQUIRREL))
 			{
 				float currentScore = 0;
 				int bestFound = 0;

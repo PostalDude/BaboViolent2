@@ -419,29 +419,32 @@ void Player::update(float delay)
             }
 
          #endif
-
-					// Ici on le call juste une fois, isshh sinon ça sera pas trop bon...
-					// On request to spawn
-					spawnRequested = true;
-					net_clsv_spawn_request spawnRequest;
-					spawnRequest.playerID = playerID;
-					spawnRequest.weaponID = nextSpawnWeapon;
-					spawnRequest.meleeID = nextMeleeWeapon;
-					skin = gameVar.cl_skin;
-					redDecal = gameVar.cl_redDecal;
-					greenDecal = gameVar.cl_greenDecal;
-					blueDecal = gameVar.cl_blueDecal;
-					memcpy(spawnRequest.skin, skin.s, (skin.len() <= 6)?skin.len()+1:7);
-					spawnRequest.blueDecal[0] = (unsigned char)(blueDecal[0] * 255.0f);
-					spawnRequest.blueDecal[1] = (unsigned char)(blueDecal[1] * 255.0f);
-					spawnRequest.blueDecal[2] = (unsigned char)(blueDecal[2] * 255.0f);
-					spawnRequest.greenDecal[0] = (unsigned char)(greenDecal[0] * 255.0f);
-					spawnRequest.greenDecal[1] = (unsigned char)(greenDecal[1] * 255.0f);
-					spawnRequest.greenDecal[2] = (unsigned char)(greenDecal[2] * 255.0f);
-					spawnRequest.redDecal[0] = (unsigned char)(redDecal[0] * 255.0f);
-					spawnRequest.redDecal[1] = (unsigned char)(redDecal[1] * 255.0f);
-					spawnRequest.redDecal[2] = (unsigned char)(redDecal[2] * 255.0f);
-					bb_clientSend(scene->client->uniqueClientID, (char*)&spawnRequest, sizeof(net_clsv_spawn_request), NET_CLSV_SPAWN_REQUEST);
+			
+			
+		{
+						// Ici on le call juste une fois, isshh sinon ça sera pas trop bon...
+						// On request to spawn
+						spawnRequested = true;
+						net_clsv_spawn_request spawnRequest;
+						spawnRequest.playerID = playerID;
+						spawnRequest.weaponID = nextSpawnWeapon;
+						spawnRequest.meleeID = nextMeleeWeapon;
+						skin = gameVar.cl_skin;
+						redDecal = gameVar.cl_redDecal;
+						greenDecal = gameVar.cl_greenDecal;
+						blueDecal = gameVar.cl_blueDecal;
+						memcpy(spawnRequest.skin, skin.s, (skin.len() <= 6) ? skin.len() + 1 : 7);
+						spawnRequest.blueDecal[0] = (unsigned char)(blueDecal[0] * 255.0f);
+						spawnRequest.blueDecal[1] = (unsigned char)(blueDecal[1] * 255.0f);
+						spawnRequest.blueDecal[2] = (unsigned char)(blueDecal[2] * 255.0f);
+						spawnRequest.greenDecal[0] = (unsigned char)(greenDecal[0] * 255.0f);
+						spawnRequest.greenDecal[1] = (unsigned char)(greenDecal[1] * 255.0f);
+						spawnRequest.greenDecal[2] = (unsigned char)(greenDecal[2] * 255.0f);
+						spawnRequest.redDecal[0] = (unsigned char)(redDecal[0] * 255.0f);
+						spawnRequest.redDecal[1] = (unsigned char)(redDecal[1] * 255.0f);
+						spawnRequest.redDecal[2] = (unsigned char)(redDecal[2] * 255.0f);
+						bb_clientSend(scene->client->uniqueClientID, (char*)&spawnRequest, sizeof(net_clsv_spawn_request), NET_CLSV_SPAWN_REQUEST);
+					}
 				}
 			}
 #endif

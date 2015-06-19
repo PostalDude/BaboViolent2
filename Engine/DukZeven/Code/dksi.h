@@ -46,7 +46,7 @@
 #endif
 
 // Les includes pour FMod
-#include <fmod.h>
+#include "../../../BaboViolent2/inc/fmod/fmod.h"
 #include "CString.h"
 #include "CVector.h"
 

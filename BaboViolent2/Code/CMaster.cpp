@@ -910,7 +910,7 @@ void CMaster::requestGames()
 	ZEVEN_DELETE_VECTOR(m_games, i);
 
 	stBV2list bv2List;
-	strcpy(bv2List.Version, m_CurrentVersion );
+	strncpy(bv2List.Version, m_CurrentVersion, 5);
 	sendPacket((char*)(&bv2List), sizeof(stBV2list), BV2_LIST);
 
 	//send a udp broadcast

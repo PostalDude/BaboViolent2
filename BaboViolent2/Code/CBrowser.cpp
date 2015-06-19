@@ -138,6 +138,10 @@ void CBrowser::updatePerso(float delay)
 				gameType = "Counter Baborist";
 #endif
 				break;
+
+			case 4:
+				gameType = "Squirrel";
+				break;
 			}
 			CControl* gameRow = new CControl(lst_browseList, CVector2i(10, 10 + nbGames*30), CVector2i(676,30), "", this, "LABEL");
 			gameRow->customData = holdRow; // Voilà pour ça

@@ -240,6 +240,13 @@ void Client::update(float delay)
 		   btn_redTeam->enable    = false;
          }
 
+	  /*if (game->gameType == GAME_TYPE_SQUIRREL)
+	  {
+		  btn_autoAssign->enable = false;
+		  btn_blueTeam->enable = true;
+		  btn_redTeam->enable = false;
+	  }*/
+
 		blink += delay;
 		while (blink >= .5f) blink -= .5f;
 		hitIndicator -= delay;

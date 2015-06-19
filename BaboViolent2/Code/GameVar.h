@@ -400,6 +400,9 @@ public:
 	CString lang_championD;
 #endif
 
+	CString lang_squirrelC;
+	CString lang_squirrelD;
+
 	CString lang_connectingC;
 	CString lang_pressF10ToCancel;
 

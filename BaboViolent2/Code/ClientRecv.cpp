@@ -925,7 +925,7 @@ void Client::recvPacket(char * buffer, int typeID)
 			if (synchronizeTimer.frameID > serverFrameID)
 			{
 				serverFrameID = synchronizeTimer.frameID;
-				game->gameTimeLeft = synchronizeTimer.gameTimeLeft;
+				game->gameTimeLeft = synchronizeTimer.gameTimeLeft;				
 				game->roundTimeLeft = synchronizeTimer.roundTimeLeft;
 			}
 			break;

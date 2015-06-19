@@ -1,3 +1,4 @@
+
 /*
 	Copyright 2012 bitHeads inc.
 
@@ -29,7 +30,8 @@
 #endif
 
 #include "md5class.h"
-#include "CThread.h"
+#include "../../../BaboViolent2/Code/CThread.h"
+
 
 class cIncConnection
 {

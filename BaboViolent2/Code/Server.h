@@ -56,6 +56,7 @@ class Server
 public:
 	// Le jeu controllé
 	Game * game;
+	bool bForceAutoBalance;
 
 #ifndef CONSOLE
 	// La font

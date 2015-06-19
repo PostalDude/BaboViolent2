@@ -561,6 +561,27 @@ void Client::render(float & alphaScope)
 #endif
 
 					break;
+
+				case GAME_TYPE_SQUIRREL:
+					// Total Time left
+					printLeftText(5, 5, 64, CString("%01i:%02i", (int)((game->gameTimeLeft + 1) / 60), (int)(game->gameTimeLeft + 1) % 60));
+					// win left
+					//*** Print squirrel name
+					if (game->blueWin >= game->redWin)
+					{
+						renderTexturedQuad(5, 5 + 64, 64, 64, tex_blueFlag);
+						printLeftText(5 + 64 + 5, 5 + 64, 64, CString("%i/%i", game->blueWin, gameVar.sv_winLimit));
+						renderTexturedQuad(5, 5 + 64 + 64, 64, 64, tex_redFlag);
+						printLeftText(5 + 64 + 5, 5 + 64 + 64, 64, CString("%i/%i", game->redWin, gameVar.sv_winLimit));
+					}
+					else
+					{
+						renderTexturedQuad(5, 5 + 64, 64, 64, tex_redFlag);
+						printLeftText(5 + 64 + 5, 5 + 64, 64, CString("%i/%i", game->redWin, gameVar.sv_winLimit));
+						renderTexturedQuad(5, 5 + 64 + 64, 64, 64, tex_blueFlag);
+						printLeftText(5 + 64 + 5, 5 + 64 + 64, 64, CString("%i/%i", game->blueWin, gameVar.sv_winLimit));
+					}
+					break;
 				}
          
 #ifdef _PRO_	      
@@ -767,6 +788,10 @@ void Client::render(float & alphaScope)
 					printCenterText(400, 5, 64, gameVar.lang_counterBaboristC);
 					printCenterText(400, 5+88, 32, gameVar.lang_counterBaboristD);
 #endif
+					break;
+				case GAME_TYPE_SQUIRREL:
+					printCenterText(400, 5, 64, gameVar.lang_squirrelC);
+					printCenterText(400, 5 + 88, 32, gameVar.lang_squirrelD);
 					break;
 				}
 				CString mapInfo (game->map->mapName);

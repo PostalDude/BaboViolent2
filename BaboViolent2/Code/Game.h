@@ -35,11 +35,12 @@ class Client;
 #ifndef CONSOLE
 #define MAX_FLOOR_MARK 500
 #endif
-#define GAME_TYPE_COUNT 4
+#define GAME_TYPE_COUNT 5
 #define GAME_TYPE_DM 0
 #define GAME_TYPE_TDM 1
 #define GAME_TYPE_CTF 2
 #define GAME_TYPE_SND 3
+#define GAME_TYPE_SQUIRREL 4
 
 #define SERVER_TYPE_NORMAL 0
 #define SERVER_TYPE_PRO 1

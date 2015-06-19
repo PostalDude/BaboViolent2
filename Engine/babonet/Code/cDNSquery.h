@@ -21,7 +21,7 @@
 
 #include "platform_types.h"
 
-#include "CThread.h"
+#include "../../../BaboViolent2/Code/CThread.h"
 
 #ifdef WIN32
 	#include "Winsock2.h"

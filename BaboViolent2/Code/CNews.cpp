@@ -47,7 +47,7 @@ CNews::CNews(CControl * in_parent, CControl * in_alignTo)
 	animY = 0;
 	velY = 0;
 	originalY = instance->localPos[1];
-	AddNews("Testing News", "by cnik", "lalalal lala bah\nkamamamamamba", "10/08/2008");
+	//AddNews("Testing News", "by cnik", "lalalal lala bah\nkamamamamamba", "10/08/2008");
 }
 
 CNews::~CNews()
