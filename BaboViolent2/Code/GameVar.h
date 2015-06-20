@@ -412,6 +412,7 @@ public:
 
 	CString lang_blueTeamC;
 	CString lang_redTeamC;
+	CString lang_squirrelTeamC;
 	CString lang_freeForAllC;
 	CString lang_spectatorC;
 

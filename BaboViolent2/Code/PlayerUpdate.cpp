@@ -656,10 +656,18 @@ void Player::controlIt(float delay)
 
 	// On clamp sa vel /* Upgrade, faster ! haha */
 	float size = currentCF.vel.length();
-	if (size > 3.25f)
+	float maxVelocity = PLAYER_MAX_VELOCITY - 0.1f;
+	if (this->game->gameType == GAME_TYPE_SQUIRREL)
+	{
+		if (this->teamID == PLAYER_TEAM_RED)
+		{
+			maxVelocity += 0.5f;
+		}
+	}
+	if (size > maxVelocity)
 	{
 		normalize(currentCF.vel);
-		currentCF.vel = currentCF.vel * 3.25f;
+		currentCF.vel = currentCF.vel * maxVelocity;
 	}
 }
 #endif

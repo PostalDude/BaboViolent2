@@ -775,13 +775,14 @@ void Server::recvPacket(char * buffer, int typeID, unsigned long bbnetID)
 						console->add( spawn );
 						
 						// Force autobalancing
-						if (game->gameType == GAME_TYPE_SQUIRREL)
+						//***
+/*						if (game->gameType == GAME_TYPE_SQUIRREL)
 						{
 							if (game->players[spawnRequest.playerID]->teamID == PLAYER_TEAM_RED)
 							{
 								bForceAutoBalance = true;
 							}
-						}
+						}*/
 					}
 					else
 					{
@@ -830,9 +831,17 @@ void Server::recvPacket(char * buffer, int typeID, unsigned long bbnetID)
 							vel[2] = (float)playerCoordFrame.vel[2] / 10.0f;
 
 							//console->add( CString( "vel : %f  %f  %f" , vel[0] , vel[1] , vel[2] ), true );
+							float maxVelocity = PLAYER_MAX_VELOCITY+0.1f;
+							if (this->game->gameType == GAME_TYPE_SQUIRREL)
+							{
+								if (game->players[playerCoordFrame.playerID]->teamID == PLAYER_TEAM_RED)
+								{
+									maxVelocity += 0.5f;
+								}
+							}
 
 							if ( (game->players[playerCoordFrame.playerID]->currentFrame - game->players[playerCoordFrame.playerID]->lastFrame > game->players[playerCoordFrame.playerID]->frameSinceLast + 5) ||
-								  vel.length() > 3.3f )
+								vel.length() > maxVelocity)
 							{
 								//--- Hey, on a 10 frame de plus que le server.. hacking???
 								game->players[playerCoordFrame.playerID]->speedHackCount++;

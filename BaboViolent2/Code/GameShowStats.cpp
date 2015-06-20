@@ -120,7 +120,14 @@ void Game::renderBlueTeam(std::vector<Player*> & blueTeam, int & vPos)
 void Game::renderRedTeam(std::vector<Player*> & redTeam, int & vPos)
 {
 	// Red Team
-	renderStatsSlice(CVector4f(1, 0, 0, .75f), gameVar.lang_redTeamC.s,"","","","", CString("%i", redScore).s, CString(""/*%i", redPing*33*/).s, vPos);
+	if (gameType == GAME_TYPE_SQUIRREL)
+	{
+		renderStatsSlice(CVector4f(1, 0, 0, .75f), gameVar.lang_squirrelTeamC.s, "", "", "", "", CString("%i", redScore).s, CString(""/*%i", redPing*33*/).s, vPos);
+	}
+	else
+	{
+		renderStatsSlice(CVector4f(1, 0, 0, .75f), gameVar.lang_redTeamC.s, "", "", "", "", CString("%i", redScore).s, CString(""/*%i", redPing*33*/).s, vPos);
+	}
 	for (int j=0;j<(int)redTeam.size();++j)
 	{
 		CString showName = redTeam[j]->name;

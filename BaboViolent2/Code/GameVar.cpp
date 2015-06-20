@@ -134,6 +134,7 @@ GameVar::GameVar()
 
 	langs.push_back(SLangText("lang_blueTeamC", &lang_blueTeamC));
 	langs.push_back(SLangText("lang_redTeamC", &lang_redTeamC));
+	langs.push_back(SLangText("lang_squirrelTeamC", &lang_squirrelTeamC));
 	langs.push_back(SLangText("lang_freeForAllC", &lang_freeForAllC));
 	langs.push_back(SLangText("lang_spectatorC", &lang_spectatorC));
 

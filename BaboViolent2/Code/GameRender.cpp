@@ -386,7 +386,7 @@ void Game::render()
 
 				// Lui on a pas le choix de l'afficher vu que ça fait parti du gameplay
 #ifdef _PRO_
-			if (gameType == GAME_TYPE_SQUIRREL) map->renderBombMark();
+			
 #else
             if (gameType == GAME_TYPE_SND) map->renderBombMark();
 #endif
@@ -774,8 +774,9 @@ void Game::renderMiniMap()
 						{
 							if (players[i]->status == PLAYER_STATUS_ALIVE)
 							{
-								if ((players[i]->teamID == thisPlayer->teamID || thisPlayer->teamID == PLAYER_TEAM_SPECTATOR) && gameType != GAME_TYPE_SND && gameType != GAME_TYPE_DM || thisPlayer == players[i])
+								if ((gameType == GAME_TYPE_SQUIRREL && thisPlayer->teamID == PLAYER_TEAM_RED) || ((players[i]->teamID == thisPlayer->teamID || thisPlayer->teamID == PLAYER_TEAM_SPECTATOR) && gameType != GAME_TYPE_SND && gameType != GAME_TYPE_DM || thisPlayer == players[i]))
 								{
+									bool bDrawn = false;
 									glPushMatrix();
 										glTranslatef(players[i]->currentCF.position[0], players[i]->currentCF.position[1], 0);
 										glRotatef(players[i]->currentCF.angle, 0, 0, 1);
@@ -793,11 +794,24 @@ void Game::renderMiniMap()
 										{
 											switch (players[i]->teamID)
 											{
-											case PLAYER_TEAM_BLUE:glColor3f(players[i]->firedShowDelay*.35f,players[i]->firedShowDelay*.35f,1);break;
+											case PLAYER_TEAM_BLUE:
+												glColor3f(players[i]->firedShowDelay*.35f,players[i]->firedShowDelay*.35f,1);
+												break;
 											case PLAYER_TEAM_RED:
 												if (gameType == GAME_TYPE_SQUIRREL)
 												{
 													glColor3f(1, 0, 0);
+													glBegin(GL_QUADS);
+														glTexCoord2f(0, 1);
+														glVertex2f(-8 / scalar, 8 / scalar);
+														glTexCoord2f(0, 0);
+														glVertex2f(-8 / scalar, -8 / scalar);
+														glTexCoord2f(1, 0);
+														glVertex2f(8 / scalar, -8 / scalar);
+														glTexCoord2f(1, 1);
+														glVertex2f(8 / scalar, 8 / scalar);
+													glEnd();
+													bDrawn = true;
 												}
 												else
 												{
@@ -806,16 +820,19 @@ void Game::renderMiniMap()
 												break;
 											}
 										}
-										glBegin(GL_QUADS);
-											glTexCoord2f(0,1);
-											glVertex2f(-4/scalar,4/scalar);
-											glTexCoord2f(0,0);
-											glVertex2f(-4/scalar,-4/scalar);
-											glTexCoord2f(1,0);
-											glVertex2f(4/scalar,-4/scalar);
-											glTexCoord2f(1,1);
-											glVertex2f(4/scalar,4/scalar);
-										glEnd();
+										if (!bDrawn)
+										{
+											glBegin(GL_QUADS);
+											glTexCoord2f(0, 1);
+											glVertex2f(-4 / scalar, 4 / scalar);
+											glTexCoord2f(0, 0);
+											glVertex2f(-4 / scalar, -4 / scalar);
+											glTexCoord2f(1, 0);
+											glVertex2f(4 / scalar, -4 / scalar);
+											glTexCoord2f(1, 1);
+											glVertex2f(4 / scalar, 4 / scalar);
+											glEnd();
+										}
 									glPopMatrix();
 								}
 							}

@@ -25,22 +25,25 @@ lang_joinedTheGame					%s\x8 joined the game
 lang_playerDisconnected				%s\x8 disconnected
 lang_player							Player
 lang_playerChangedHisNameFor		Player %s\x8 changed his name for %s
-lang_returnBlueFlag					\x1%s\x8 returned the blue flag
-lang_returnRedFlag					\x4%s\x8 returned the red flag
+lang_returnBlueFlag					\x1Blue flag returned \x8by %s
+lang_returnRedFlag					\x4Red flag returned \x8by %s
 lang_tookBlueFlag					\x4%s\x8 took the blue flag
 lang_tookRedFlag					\x1%s\x8 took the red flag
-lang_redScore						Red team scores!
-lang_blueScore						Blue team scores!
+lang_redScore						\x4Red team scores!
+lang_blueScore						\x1Blue team scores!
 
 lang_reloading						Reloading
 
 lang_spawnIn						Spawn in %i:%02i
-lang_pressToRespawn					Press use key [%s] to respawn
+lang_pressToRespawn					Press use key [\x4%s\x8] to respawn
 
 lang_blueTeamWin					BLUE TEAM WINS
 lang_redTeamWin						RED TEAM WINS
 lang_roundDraw						ROUND DRAW
 lang_changingMap					CHANGING MAP
+
+lang_squirrelC						SQUIRREL
+lang_squirrelD						A random player plays as the target (squirrel) and must survive!
 
 lang_deathmatchC					DEATHMATCH
 lang_deathmatchD					The player with the highest scores wins!
@@ -49,35 +52,36 @@ lang_teamDeathmatchD				The team with the highest scores wins!
 lang_captureTheFlagC				CAPTURE THE FLAG
 lang_captureTheFlagD				Capture the enemy's flag and return it to yours!
 lang_counterBaboristC				COUNTER BABORIST
-lang_counterBaboristD				Red : plank the explosive on the bomb site. Blue : defend the bomb site
+lang_counterBaboristD				Red: plant the explosive on the bomb site. Blue: defend the bomb site
 
 lang_connectingC					CONNECTING
-lang_pressF10ToCancel				Press F10 to cancel
+lang_pressF10ToCancel				Press [\x4F10\x8] to cancel
 
 lang_goesSpectator					%s\x8 goes spectator
-lang_joinBlueTeamP					%s\x1 joins blue team
-lang_joinRedTeamP					%s\x4 joins red team
+lang_joinBlueTeamP					%s\x1 joins Blue team
+lang_joinRedTeamP					%s\x4 joins Red team
 
 lang_blueTeamC						BLUE TEAM
 lang_redTeamC						RED TEAM
+lang_squirrelTeamC					SQUIRREL
 lang_freeForAllC					FREE FOR ALL %i
 lang_spectatorC						SPECTATORS
 
-lang_playerNameC					PLAYER NAME
-lang_scoreC							SCORE
-lang_pingC							PING
+lang_playerNameC					Player
+lang_scoreC							Score
+lang_pingC							Ping
 
 lang_laggerC						*LAGGER*
 
 lang_friendlyFire					Friendly Fire
 
-lang_serverVersion					server version %01i.%02i.%02i
-lang_clientVersion					client version %01i.%02i.%02i
+lang_serverVersion					Server version %01i.%02i.%02i
+lang_clientVersion					Client version %01i.%02i.%02i
 
 lang_connectionFailed				\x4 Connection Failed! \x8 Check IP Address
 lang_back							<- Back
 
-lang_launch							Launch !
+lang_launch							Launch!
 lang_dedicate						Dedicate
 
 lang_generalGameOption				General Game Options
@@ -115,7 +119,7 @@ lang_localNetwork					Local Network
 lang_refreshList					Refresh List
 lang_players						Players
 lang_mapName						Map Name
-lang_join							Join !
+lang_join							Join!
 lang_IPAdress						IP Adress
 lang_canRefreshIn					Can refresh in %i sec
 lang_nbGamesRefreshed				%i of %i
@@ -168,7 +172,7 @@ lang_moveRight						Move Right
 lang_moveLeft						Move Left
 lang_shoot							Shoot
 lang_throwGrenade					Throw Grenade
-lang_throwCocktailMolotov			Throw Cocktail Molotov
+lang_throwCocktailMolotov			Throw Molotov Cocktail
 lang_use							Use
 lang_chatToAll						Chat to All
 lang_chatToTeam						Chat to Team

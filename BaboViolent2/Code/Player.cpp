@@ -231,6 +231,11 @@ Player::~Player()
 //
 void Player::kill(bool silenceDeath)
 {
+	if (status == PLAYER_STATUS_DEAD)
+	{
+		return;
+	}
+
 #ifndef CONSOLE
 	if (silenceDeath)
 	{
@@ -285,15 +290,25 @@ void Player::kill(bool silenceDeath)
 				// On envoit la new pos du flag aux autres
 				net_svcl_drop_flag dropFlag;
 				dropFlag.flagID = (char)i;
-				dropFlag.position[0] = game->map->flagPos[i][0];
+				dropFlag.position[0] = game->map->flagPos[i][		0];
 				dropFlag.position[1] = game->map->flagPos[i][1];
 				dropFlag.position[2] = game->map->flagPos[i][2];
 				bb_serverSend((char*)&dropFlag, sizeof(net_svcl_drop_flag), NET_SVCL_DROP_FLAG, 0);
 			}
 		}
 	}
-	currentCF.position.set(-999,-999,0);
+
+
+	// Force autobalancing
+	if (game->gameType == GAME_TYPE_SQUIRREL)
+	{
+		if ((game->isServerGame) && (this->teamID == PLAYER_TEAM_RED))
+		{
+			scene->server->autoBalance();			
+		}
+	}
 	
+	currentCF.position.set(-999,-999,0);
 }
 
 

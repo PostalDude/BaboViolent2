@@ -39,6 +39,7 @@
 #define ICONE_FRIENDLYFIRE		0x0004
 #define ICONE_3DVIEW			0x0008
 
+#define PLAYER_MAX_VELOCITY		3.9f
 
 class CCurl;
 
