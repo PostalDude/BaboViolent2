@@ -686,6 +686,7 @@ void Server::recvPacket(char * buffer, int typeID, unsigned long bbnetID)
 					{
 						if (!(spawnRequest.weaponID == WEAPON_SMG ||
 							spawnRequest.weaponID == WEAPON_SHOTGUN ||
+							spawnRequest.weaponID == WEAPON_VACUUM ||
 							spawnRequest.weaponID == WEAPON_SNIPER ||
 							spawnRequest.weaponID == WEAPON_DUAL_MACHINE_GUN ||
 							spawnRequest.weaponID == WEAPON_CHAIN_GUN ||
@@ -978,7 +979,7 @@ void Server::recvPacket(char * buffer, int typeID, unsigned long bbnetID)
 				{
 
 					//special case with the shotty and sniper that shots 2 and 5 bullets on the same frame :(
-					if( playerShoot.weaponID == WEAPON_SHOTGUN || playerShoot.weaponID == WEAPON_SNIPER )
+					if (playerShoot.weaponID == WEAPON_SHOTGUN || playerShoot.weaponID == WEAPON_VACUUM || playerShoot.weaponID == WEAPON_SNIPER)
 					{
 #ifdef _PRO_
 						if (game->players[playerShoot.playerID]->weapon->weaponID == WEAPON_SNIPER)
@@ -998,8 +999,7 @@ void Server::recvPacket(char * buffer, int typeID, unsigned long bbnetID)
 						}
 						else
 						{
-							if(game->players[playerShoot.playerID]->shotCount < ( playerShoot.weaponID == WEAPON_SHOTGUN ? 5 : 3))
-
+							if(game->players[playerShoot.playerID]->shotCount < ( (playerShoot.weaponID == WEAPON_SHOTGUN || playerShoot.weaponID == WEAPON_VACUUM) ? 5 : 3))
 							{
 								game->players[playerShoot.playerID]->shotCount += 1;
 							}

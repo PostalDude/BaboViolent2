@@ -194,6 +194,7 @@ public:
 	float m_seekingTime;
 	float m_checkAStarTimer;
 	float m_fireRate;
+	float m_moveRate;
 
 public:
 	CMiniBot(); 
@@ -404,6 +405,7 @@ public:
 #endif
 
 	long fireFrameDelay; // This is for the shoty bug
+	long killMinibotTimer;
 
 	bool lastShootWasNade;
 

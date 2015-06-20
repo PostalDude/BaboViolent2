@@ -4,6 +4,7 @@ lang_dualMachineGun					Dual Machine Gun
 lang_subMachineGun					Sub Machine Gun
 lang_changGun						Chain Gun
 lang_shotgun						Shotgun
+lang_vacuum						Vacuum Gun
 lang_sniper							Sniper Rifle
 lang_bazooka						Bazooka
 lang_grenade						Grenade

@@ -32,13 +32,15 @@
 #define WEAPON_BAZOOKA 5
 #define WEAPON_PHOTON_RIFLE 6
 #define WEAPON_FLAME_THROWER 7
-#define WEAPON_GRENADE 8
-#define WEAPON_COCKTAIL_MOLOTOV 9
-#define WEAPON_KNIVES 10
-#define WEAPON_NUCLEAR 11
-#define WEAPON_SHIELD 12
+#define WEAPON_VACUUM 8
+#define WEAPON_GRENADE 9
+#define WEAPON_COCKTAIL_MOLOTOV 10
+#define WEAPON_KNIVES 11
+#define WEAPON_NUCLEAR 12
+#define WEAPON_SHIELD 13
 #ifdef _PRO_
-#define WEAPON_MINIBOT 13
+#define WEAPON_MINIBOT 14
+
 #define WEAPON_MINIBOT_WEAPON 100
 #endif
 
@@ -110,6 +112,7 @@ public:
 	CString sv_password;
 	bool sv_enableSMG;
 	bool sv_enableShotgun;
+	bool sv_enableVacuum;
 	bool sv_enableSniper;
 	bool sv_enableDualMachineGun;
 	bool sv_enableChainGun;
@@ -349,6 +352,7 @@ public:
 	CString lang_subMachineGun;
 	CString lang_changGun;
 	CString lang_shotgun;
+	CString lang_vacuum;
 	CString lang_sniper;
 	CString lang_bazooka;
 	CString lang_grenade;

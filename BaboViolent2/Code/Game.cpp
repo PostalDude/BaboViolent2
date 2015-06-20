@@ -317,6 +317,7 @@ int SelectToAvailableWeapon()
 {
 	if (gameVar.sv_enableSMG) return WEAPON_SMG;
 	if (gameVar.sv_enableShotgun) return WEAPON_SHOTGUN;
+	if (gameVar.sv_enableVacuum) return WEAPON_VACUUM;
 	if (gameVar.sv_enableSniper) return WEAPON_SNIPER;
 	if (gameVar.sv_enableDualMachineGun) return WEAPON_DUAL_MACHINE_GUN;
 	if (gameVar.sv_enableChainGun) return WEAPON_CHAIN_GUN;
@@ -443,6 +444,13 @@ void Game::update(float delay)
 					if (players[i]->weapon->weaponID == WEAPON_SHOTGUN)
 					{
 						if (!gameVar.sv_enableShotgun)
+						{
+							players[i]->switchWeapon(SelectToAvailableWeapon(), true);
+						}
+					}
+					if (players[i]->weapon->weaponID == WEAPON_VACUUM)
+					{
+						if (!gameVar.sv_enableVacuum)
 						{
 							players[i]->switchWeapon(SelectToAvailableWeapon(), true);
 						}
@@ -765,6 +773,7 @@ void Game::update(float delay)
 		//-- We check for all enable guns
 		scene->client->btn_guns[WEAPON_SMG]->enable = gameVar.sv_enableSMG;
 		scene->client->btn_guns[WEAPON_SHOTGUN]->enable = gameVar.sv_enableShotgun;
+		scene->client->btn_guns[WEAPON_VACUUM]->enable = gameVar.sv_enableVacuum;
 		scene->client->btn_guns[WEAPON_SNIPER]->enable = gameVar.sv_enableSniper;
 		scene->client->btn_guns[WEAPON_DUAL_MACHINE_GUN]->enable = gameVar.sv_enableDualMachineGun;
 		scene->client->btn_guns[WEAPON_CHAIN_GUN]->enable = gameVar.sv_enableChainGun;
@@ -1250,6 +1259,21 @@ void Game::shootSV(net_clsv_player_shoot & playerShoot)
 			shootSV(playerShoot.playerID, playerShoot.nuzzleID, deviationAngles[i], p1, newP2);
 		}
 	}
+	else if (player->weapon->weaponID == WEAPON_VACUUM)
+	{
+		// ves's suggestion
+		const float directionAngles[5] = { -1.0f, -0.5f, 0.0f, 0.5f, 1.0f };
+		const float deviationAngles[5] = { 1.0f, 2.0f, 3.0f, 4.0f, 5.0f };//for the moment, these simply identify which shots are which, the actual deviation is fixed in the next call to shootSV
+		// adder's suggestion
+		//const float directionAngles[7] = {0.0f, 7.0f, -7.0f, 3.5f, -3.5f, 10.5f, -10.5f};
+		//const float deviationAngles[7] = {3.5f, 3.5f, 3.5f, 3.5f, 3.5f, 3.5f, 3.5f};
+		CVector3f newP2;
+		for (int i = 0; i<player->weapon->nbShot; ++i)
+		{
+			newP2 = rotateAboutAxis(p2, directionAngles[i], CVector3f(0.0f, 0.0f, 1.0f));
+			shootSV(playerShoot.playerID, playerShoot.nuzzleID, deviationAngles[i], p1, newP2);
+		}
+	}
 	else if (player->weapon->weaponID == WEAPON_SNIPER)
 	{
 		for (int i=0;i<player->weapon->nbShot;++i)
@@ -1309,7 +1333,7 @@ void Game::shootMinibotSV(CMiniBot * minibot, float imp, CVector3f p1, CVector3f
 	{
 		if (players[i])
 		{
-			if (i != minibot->owner->playerID)
+			//if (i != minibot->owner->playerID)
 			{
 				if (players[i]->status == PLAYER_STATUS_ALIVE)
            //    if (players[i]->status == PLAYER_STATUS_ALIVE && (players[i]->teamID != player->teamID || gameType == GAME_TYPE_DM || gameType == GAME_TYPE_SND || gameVar.sv_friendlyFire))
@@ -1389,6 +1413,33 @@ void Game::shootSV(int playerID, int nuzzleID, float imp, CVector3f p1, CVector3
 	{
 		imp = 3.5f;
 	}
+
+	if (player->weapon->weaponID == WEAPON_VACUUM)
+	{
+		switch (ident)
+		{
+		case 1:
+			oldP2 = rotateAboutAxis(p2, 1.0f, CVector3f(0.0f, 0.0f, 1.0f));
+			break;
+		case 2:
+			oldP2 = rotateAboutAxis(p2, 0.5f, CVector3f(0.0f, 0.0f, 1.0f));
+			break;
+		case 3:
+			oldP2 = rotateAboutAxis(p2, 0.0f, CVector3f(0.0f, 0.0f, 1.0f));
+			break;
+		case 4:
+			oldP2 = rotateAboutAxis(p2, -1.0f, CVector3f(0.0f, 0.0f, 1.0f));
+			break;
+		case 5:
+			oldP2 = rotateAboutAxis(p2, -1.0f, CVector3f(0.0f, 0.0f, 1.0f));
+			break;
+		};
+		normalize(oldP2);
+	}
+	if (player->weapon->weaponID == WEAPON_VACUUM)
+	{
+		imp = 3.5f;
+	}
 #ifdef _PRO_
 	CVector3f dir = p2;
     
@@ -1458,6 +1509,44 @@ void Game::shootSV(int playerID, int nuzzleID, float imp, CVector3f p1, CVector3
          p2 = p1 + dir * clampShot;
 	   }
 
+	   if (player->weapon->weaponID == WEAPON_VACUUM)
+	   {
+		   //--- Clamp shot
+		   CVector3f dir = p2 - p1;
+		   normalize(dir);
+
+		   float clampShot;
+		   float variation = 0.01f;
+		   if (gameVar.sv_serverType == SERVER_TYPE_PRO)
+		   {	//clampShot = gameVar.sv_shottyRange;
+			   CVector3f sinThetaVector = cross(dir, oldP2);
+			   float sinTheta = sinThetaVector.length();
+			   clampShot = gameVar.sv_shottyDropRadius / sinTheta;
+		   }
+		   else
+		   {
+			   switch (ident)
+			   {
+			   case 1:
+				   clampShot = gameVar.sv_shottyRange*(0.333f + rand(-variation, variation));
+				   break;
+			   case 2:
+				   clampShot = gameVar.sv_shottyRange*(0.667f + rand(-variation, variation));
+				   break;
+			   case 3:
+				   clampShot = gameVar.sv_shottyRange;
+				   break;
+			   case 4:
+				   clampShot = gameVar.sv_shottyRange*(0.667f + rand(-variation, variation));
+				   break;
+			   case 5:
+				   clampShot = gameVar.sv_shottyRange*(0.333f + rand(-variation, variation));
+				   break;
+			   };
+		   }
+
+		   p2 = p1 + dir * clampShot;
+	   }
 
 	bool isCollision = false;
 

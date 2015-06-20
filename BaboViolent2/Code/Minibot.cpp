@@ -33,6 +33,7 @@ CMiniBot::CMiniBot()
 	cFProgression = 0;
 	m_seekingTime = 5;
 	m_fireRate = 0;
+	m_moveRate = 0;
 	m_checkAStarTimer = 1;
 	m_state = MINIBOT_STATE_SEEKING;
 }
@@ -64,6 +65,7 @@ void CMiniBot::Think(float delay)
 	float disSqr = distanceSquared(owner->currentCF.position, currentCF.position);
 
 	m_fireRate -= delay;
+	m_moveRate -= delay;
 
 	//--- At all time, get the closest enemy player and shoot him!
 	Player * closest = 0;
@@ -78,9 +80,9 @@ void CMiniBot::Think(float delay)
 			if (game->players[i]->status == PLAYER_STATUS_ALIVE)
 			{
 				//--- Ennemy team?
-				if (game->players[i] != owner && (
+				/*if (game->players[i] != owner && (
 					game->players[i]->teamID != owner->teamID || game->gameType == GAME_TYPE_DM || game->gameType == GAME_TYPE_SND)
-					)
+					)*/
 				{
 					//--- Close enough?
 					float disWithEnnemySqr = 
@@ -110,21 +112,40 @@ void CMiniBot::Think(float delay)
 		}
 	}
 
+	if (m_moveRate <= 0 && closest)
+	{
+	//	if (closest->playerID != owner->playerID)
+		{
+			CVector3f shootDir = closest->currentCF.position - currentCF.position;
+			normalize(shootDir);
+			currentCF.vel += shootDir * 0.8f;
+		}
+		m_moveRate = 0.05f;
+	}
+
 	if (m_fireRate <= 0 && closest)
 	{
-		m_fireRate = .25f;
-		currentCF.mousePosOnMap = closest->currentCF.position;
+		if (closest->playerID != this->owner->playerID)
+		{
+			m_fireRate = 0.2f;
 
-		//--- Shoot him!!!
-		CVector3f shootDir = closest->currentCF.position - currentCF.position;
-		normalize(shootDir);
-		CVector3f z = CVector3f(0,0,1);
-		CVector3f mountOffset = rotateAboutAxis(shootDir,-90,z);
-		normalize(mountOffset);
-		mountOffset *= 0.1f;
-		CVector3f origin = p1 + mountOffset;
-		if (!game->map->rayTest(origin, p2, normal) && !nukeBot)
-			game->shootMinibotSV(this, 10, currentCF.position + mountOffset, currentCF.position + shootDir * 10.0f);
+			currentCF.mousePosOnMap = closest->currentCF.position;
+
+			//--- Shoot him!!!
+			CVector3f shootDir = closest->currentCF.position - currentCF.position;
+			normalize(shootDir);
+			CVector3f z = CVector3f(0, 0, 1);
+			CVector3f mountOffset = rotateAboutAxis(shootDir, -90, z);
+			normalize(mountOffset);
+			mountOffset *= 0.1f;
+			CVector3f origin = p1 + mountOffset;
+			if (!game->map->rayTest(origin, p2, normal) && !nukeBot)
+			{
+				game->shootMinibotSV(this, 20, currentCF.position + mountOffset, currentCF.position + shootDir * 15.0f);
+				game->shootMinibotSV(this, 30, currentCF.position + mountOffset, currentCF.position + shootDir * 5.0f);
+				game->shootMinibotSV(this, 70, currentCF.position + mountOffset, currentCF.position + shootDir * 1.0f);
+			}
+		}
 	}
 
 	//--- States switch
@@ -230,10 +251,10 @@ void CMiniBot::Think(float delay)
 		else
 		{
 			path.clear();
-		}*/
+		}
 
-		// On clamp sa vel /* Upgrade, faster ! haha */
-		/*float size = currentCF.vel.length();
+		// On clamp sa vel
+		float size = currentCF.vel.length();
 		if (size > 7.0f)
 		{
 			currentCF.vel /= size;

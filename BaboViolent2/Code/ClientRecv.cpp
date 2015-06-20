@@ -673,7 +673,7 @@ void Client::recvPacket(char * buffer, int typeID)
 							CVector3f firePos;
 							for (float i=0;i<=1;i+=.05f)
 							{
-								firePos = p1 + (p2 - p1) * i;
+								firePos = p1 + (p2 - p1) * 1.5f*i;
 								dkpCreateParticle(	(firePos+rand(CVector3f(-i*.3f,-i*.3f,0),CVector3f(i*.3f,i*.3f,0))).s,//float *position,
 													(CVector3f(0,0,1) + normal).s,//float *vel,
 													rand(CVector4f(i,0,1-i,0.0f),CVector4f(i,i*.75f,1-i,0.0f)).s,//float *startColor,
@@ -683,7 +683,7 @@ void Client::recvPacket(char * buffer, int typeID)
 													i/*.5f*/,//float duration,
 													0,//float gravityInfluence,
 													0,//float airResistanceInfluence,
-													rand(0.0f, 30.0f),//float rotationSpeed,
+													rand(0.0f, 130.0f),//float rotationSpeed,
 													gameVar.tex_smoke1,//unsigned int texture,
 													DKP_SRC_ALPHA,//unsigned int srcBlend,
 													DKP_ONE,//unsigned int dstBlend,
@@ -693,11 +693,11 @@ void Client::recvPacket(char * buffer, int typeID)
 													rand(CVector4f(i,0,1-i,1.0f),CVector4f(i,i*.75f,1-i,1.0f)).s,//float *startColor,
 													CVector4f(i,i*.75f,1-i,0.0f).s,//float *endColor,
 													.0f,//float startSize,
-													.6f * (i*.5f + .5f),//float endSize,
+													.8f * (i*.5f + .5f),//float endSize,
 													i/*.5f*/,//float duration,
 													0,//float gravityInfluence,
 													0,//float airResistanceInfluence,
-													rand(0.0f, 30.0f),//float rotationSpeed,
+													rand(0.0f, 10.0f),//float rotationSpeed,
 													gameVar.tex_smoke1,//unsigned int texture,
 													DKP_SRC_ALPHA,//unsigned int srcBlend,
 													DKP_ONE,//unsigned int dstBlend,

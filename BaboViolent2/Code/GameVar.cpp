@@ -71,6 +71,7 @@ GameVar::GameVar()
 	langs.push_back(SLangText("lang_subMachineGun", &lang_subMachineGun));
 	langs.push_back(SLangText("lang_changGun", &lang_changGun));
 	langs.push_back(SLangText("lang_shotgun", &lang_shotgun));
+	langs.push_back(SLangText("lang_vacuum", &lang_vacuum));
 	langs.push_back(SLangText("lang_sniper", &lang_sniper));
 	langs.push_back(SLangText("lang_bazooka", &lang_bazooka));
 	langs.push_back(SLangText("lang_grenade", &lang_grenade));
@@ -281,6 +282,10 @@ GameVar::GameVar()
       .19f, 15, 1, 2.00f, 5, WEAPON_CHAIN_GUN, PROJECTILE_DIRECT);
 	weapons[WEAPON_SHOTGUN] = new Weapon("main/models/ShotGun.DKO", "main/sounds/Shotgun.wav", 0.85f, gameVar.lang_shotgun.s,
 		.21f, 20, 5, 3.0f, 12, WEAPON_SHOTGUN, PROJECTILE_DIRECT);
+	
+	weapons[WEAPON_VACUUM] = new Weapon("main/models/ShotGun.DKO", "main/sounds/Shotgun.wav", 0.05f, gameVar.lang_vacuum.s,
+		.03f, 200, 5, -333.0f, 12, WEAPON_VACUUM, PROJECTILE_DIRECT);
+
 	weapons[WEAPON_SNIPER] = new Weapon("main/models/Sniper.DKO", "main/sounds/Sniper.wav", 2.0f, gameVar.lang_sniper.s,
 		.30f, 0, 1, 3.0f, 0, WEAPON_SNIPER, PROJECTILE_DIRECT);
 	weapons[WEAPON_BAZOOKA] = new Weapon("main/models/Bazooka.DKO", "main/sounds/Bazooka.wav", 1.75f, lang_bazooka,
@@ -301,7 +306,7 @@ GameVar::GameVar()
 		0, 0, 1, 0, 0, WEAPON_SHIELD, PROJECTILE_NONE);
 	#ifdef _PRO_
 		weapons[WEAPON_MINIBOT] = new Weapon("main/models/Antena.DKO", "main/sounds/equip.wav", 1.0f, "Mini Bot",
-			.05f, 0, 1, 0, 0, WEAPON_MINIBOT, PROJECTILE_NONE);
+			.03f, 0, 1, 0, 0, WEAPON_MINIBOT, PROJECTILE_NONE);
 	#endif
 #else
 	weapons[WEAPON_DUAL_MACHINE_GUN] = new Weapon("", "", .1f, "Dual Machine Gun",
@@ -312,6 +317,8 @@ GameVar::GameVar()
 		.19f, 15, 1, 2.00f, 5, WEAPON_CHAIN_GUN, PROJECTILE_DIRECT);
 	weapons[WEAPON_SHOTGUN] = new Weapon("", "", 0.85f, "Shotgun",
 		.21f, 20, 5, 3.0f, 12, WEAPON_SHOTGUN, PROJECTILE_DIRECT);
+	weapons[WEAPON_VACUUM] = new Weapon("", "", 0.85f, "Vacuum",
+		.21f, 20, 5, -13.0f, 12, WEAPON_VACUUM, PROJECTILE_DIRECT);
 	weapons[WEAPON_SNIPER] = new Weapon("", "", 2.0f,"Sniper Rifle",
 		.30f, 0, 1, 3.0f, 0, WEAPON_SNIPER, PROJECTILE_DIRECT);
 	weapons[WEAPON_BAZOOKA] = new Weapon("", "", 1.75f, "Bazooka",
@@ -407,6 +414,9 @@ GameVar::GameVar()
 	dksvarRegister(CString("sv_enableSMG [bool : true | false (default true)]"), &sv_enableSMG, true);
 	sv_enableShotgun = true;
 	dksvarRegister(CString("sv_enableShotgun [bool : true | false (default true)]"), &sv_enableShotgun, true);
+	sv_enableVacuum = true;
+	dksvarRegister(CString("sv_enableVacuum [bool : true | false (default true)]"), &sv_enableVacuum, true);
+
 	sv_enableSniper = true;
 	dksvarRegister(CString("sv_enableSniper [bool : true | false (default true)]"), &sv_enableSniper, true);
 	sv_enableDualMachineGun = true;
@@ -604,8 +614,8 @@ GameVar::GameVar()
 	dksvarRegister(CString("cl_affinityMode [int : 0=Default, 1=PartialBias, 2=FullBias]"),
 		&cl_affinityMode, 0, 2, LIMIT_MIN | LIMIT_MAX, true);
 	cl_primaryWeapon = 0;
-	dksvarRegister(CString("cl_primaryWeapon [int : 0=SMG, 1=Shotgun, 2=Sniper, 3=DMG, 4=Chaingun, 5=Bazooka, 6=Photon, 7=Flamethrower]"),
-		&cl_primaryWeapon, 0, 7, LIMIT_MIN | LIMIT_MAX, true);
+	dksvarRegister(CString("cl_primaryWeapon [int : 0=SMG, 1=Shotgun, 2=Sniper, 3=DMG, 4=Chaingun, 5=Bazooka, 6=Photon, 7=Flamethrower, 8=Vacuum]"),
+		&cl_primaryWeapon, 0, 8, LIMIT_MIN | LIMIT_MAX, true);
 	//cl_weaponSideRight = true;
 	//dksvarRegister(CString("cl_weaponSideRight [bool : true | false (default true)]"),&cl_weaponSideRight,true);
 	cl_secondaryWeapon = 0;
@@ -839,6 +849,7 @@ void GameVar::sendSVVar(unsigned long babonetID)
 	sendOne("sv_password", babonetID);
 	sendOne("sv_enableSMG", babonetID);
 	sendOne("sv_enableShotgun", babonetID);
+	sendOne("sv_enableVacuum", babonetID);
 	sendOne("sv_enableSniper", babonetID);
 	sendOne("sv_enableDualMachineGun", babonetID);
 	sendOne("sv_enableChainGun", babonetID);
@@ -919,6 +930,7 @@ void GameVar::sendSVVar(long peerId)
 	sendOne("sv_password", peerId);
 	sendOne("sv_enableSMG", peerId);
 	sendOne("sv_enableShotgun", peerId);
+	sendOne("sv_enableVacuum", peerId);
 	sendOne("sv_enableSniper", peerId);
 	sendOne("sv_enableDualMachineGun", peerId);
 	sendOne("sv_enableChainGun", peerId);
@@ -1023,6 +1035,7 @@ void GameVar::loadModels()
 	weapons[WEAPON_SMG]->loadModels();
 	weapons[WEAPON_CHAIN_GUN]->loadModels();
 	weapons[WEAPON_SHOTGUN]->loadModels();
+	weapons[WEAPON_VACUUM]->loadModels();
 	weapons[WEAPON_SNIPER]->loadModels();
 	weapons[WEAPON_BAZOOKA]->loadModels();
 	weapons[WEAPON_GRENADE]->loadModels();
@@ -1167,6 +1180,7 @@ void GameVar::deleteModels()
 
 	delete weapons[WEAPON_SMG];
 	delete weapons[WEAPON_SHOTGUN];
+	delete weapons[WEAPON_VACUUM];
 	delete weapons[WEAPON_SNIPER];
 	delete weapons[WEAPON_DUAL_MACHINE_GUN];
 	delete weapons[WEAPON_CHAIN_GUN];

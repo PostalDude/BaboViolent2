@@ -339,7 +339,7 @@ void Weapon::shoot(Player * owner)
 
 		//--- Si on est shotgun, pis que ça fait 6 shot, on reload
 		shotInc++;
-		if (shotInc >= 6 && weaponID == WEAPON_SHOTGUN)
+		if (shotInc >= 6 && (weaponID == WEAPON_SHOTGUN || weaponID == WEAPON_VACUUM))
 		{
 			if (gameVar.sv_enableShotgunReload) 
 			{
@@ -547,7 +547,7 @@ void Weapon::shoot(net_svcl_player_shoot & playerShoot, Player * owner)
 		float percent = 0;
 		for (float i=0;i<=1;i+=.05f)
 		{
-			firePos = p1 + (p2 - p1) * i;
+			firePos = p1 + (p2 - p1) *i;
 			dkpCreateParticle(	(firePos+rand(CVector3f(-i*.3f,-i*.3f,0),CVector3f(i*.3f,i*.3f,0))).s,//float *position,
 								(CVector3f(0,0,1) + normal).s,//float *vel,
 								rand(CVector4f(i,0,1-i,0.0f),CVector4f(i,i*.75f,1-i,0.0f)).s,//float *startColor,

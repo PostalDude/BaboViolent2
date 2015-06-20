@@ -223,6 +223,35 @@ void Client::render(float & alphaScope)
 								glVertex2f(400-100+(1-game->thisPlayer->weapon->currentFireDelay/3)*200, 440);
 							glEnd();
 						}
+						else if (game->thisPlayer->weapon->weaponID == WEAPON_VACUUM && game->thisPlayer->weapon->currentFireDelay > 0)
+						{
+							glDisable(GL_TEXTURE_2D);
+							glColor4f(1, 1, 1, .5f);
+							glBegin(GL_QUADS);
+							glVertex2f(400 - 100 - 5, 440 - 5);
+							glVertex2f(400 - 100 - 5, 454 + 5);
+							glVertex2f(400 - 100 + 200 + 10, 454 + 5);
+							glVertex2f(400 - 100 + 200 + 10, 440 - 5);
+							glEnd();
+							glColor4f(0, 0, 0, .5f);
+							glBegin(GL_QUADS);
+							glVertex2f(400 - 100 - 1, 440 - 1);
+							glVertex2f(400 - 100 - 1, 454 + 1);
+							glVertex2f(400 - 100 + 200 + 2, 454 + 1);
+							glVertex2f(400 - 100 + 200 + 2, 440 - 1);
+							glEnd();
+							glEnable(GL_TEXTURE_2D);
+							glColor4f(.5f, 1, .5f, game->thisPlayer->weapon->currentFireDelay / game->thisPlayer->weapon->fireDelay*.75f + .25f);
+							if (blink < .25f) printCenterText(400, 400, 32, gameVar.lang_reloading);
+							glDisable(GL_TEXTURE_2D);
+							// La progress bar
+							glBegin(GL_QUADS);
+							glVertex2f(400 - 100, 440);
+							glVertex2f(400 - 100, 454);
+							glVertex2f(400 - 100 + (1 - game->thisPlayer->weapon->currentFireDelay / 3) * 200, 454);
+							glVertex2f(400 - 100 + (1 - game->thisPlayer->weapon->currentFireDelay / 3) * 200, 440);
+							glEnd();
+						}
 						else if (game->thisPlayer->meleeDelay > 0)
 						{
 							glDisable(GL_TEXTURE_2D);
@@ -374,7 +403,7 @@ void Client::render(float & alphaScope)
 					}
 
 					// Le nb de balle de shotgun quil lui reste
-					if ( (game->thisPlayer->weapon->weaponID == WEAPON_SHOTGUN) &&
+					if (((game->thisPlayer->weapon->weaponID == WEAPON_VACUUM) || (game->thisPlayer->weapon->weaponID == WEAPON_SHOTGUN)) &&
 						(gameVar.sv_enableShotgunReload == true) )
 					{
 						glEnable(GL_TEXTURE_2D);

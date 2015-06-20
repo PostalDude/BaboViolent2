@@ -61,6 +61,7 @@ void PlayerStats::MergeStats(PlayerStats* mergeWith)
 Player::Player(char pPlayerID, Map * pMap, Game * pGame): pingLogInterval(0.05f),
 	pingLogID(0)
 {
+	killMinibotTimer = 0;
 	nextPingLogTime = pingLogInterval = 1.0f/30;
 	rocketInAir = false;
 	detonateRocket = false;
@@ -276,7 +277,11 @@ void Player::kill(bool silenceDeath)
 
 #ifdef _PRO_
 	//--- Delete minibot
-	if (minibot) delete minibot; minibot = 0;
+	if (minibot)
+	{
+		delete minibot;
+		minibot = 0;
+	}
 #endif
 
 	// Si il avait le flag, on le laisse tomber
@@ -968,6 +973,7 @@ void Player::reinit()
 	pingOverMax = 0.0f;
 	flagAttempts = 0;
 	timePlayedCurGame = 0.0f;
+	killMinibotTimer = 0;
 
 #ifdef _PRO_
    spawnSlot = -1;
@@ -1214,6 +1220,9 @@ void Player::hitSV(Weapon * fromWeapon, Player * from, float damage)
 			case WEAPON_SHOTGUN:
 				cdamage = gameVar.sv_shottyDamage;
 				break;
+			/*case WEAPON_VACUUM:
+				cdamage = gameVar.sv_shottyDamage;
+				break;*/
 			case WEAPON_DUAL_MACHINE_GUN:
 				cdamage = gameVar.sv_dmgDamage;
 				break;
@@ -1286,7 +1295,7 @@ void Player::hitSV(Weapon * fromWeapon, Player * from, float damage)
 		// On check si c'est ff, ou reflect, etc
 		if (from->teamID == teamID && game->gameType != GAME_TYPE_DM && game->gameType != GAME_TYPE_SND)
 		{
-			if (gameVar.sv_friendlyFire || from->playerID == playerID || game->gameType == GAME_TYPE_DM || game->gameType == GAME_TYPE_SND)
+			if ((fromWeapon->weaponID == WEAPON_MINIBOT_WEAPON) || (gameVar.sv_friendlyFire || from->playerID == playerID || game->gameType == GAME_TYPE_DM || game->gameType == GAME_TYPE_SND))
 			{
 				if (from != this)
 					from->dmg += (cdamage<life)?cdamage:life;
@@ -1647,6 +1656,7 @@ void Player::setCoordFrameMinibot(net_svcl_minibot_coord_frame & minibotCoordFra
 {
 	if (playerID != minibotCoordFrame.playerID) return; // Wtf c pas le bon player!? (Pas suposer arriver)
 
+	
 	//--- Create the minibot if doesn't exist so we don't
 	//	  have to send it in initial game state :)
 	if (!minibot)

@@ -102,6 +102,7 @@ Client::Client(Game * pGame)
 	btn_guns[5] = new CControl(clientRoot, CVector2i(250, 130 + 5 * 40), CVector2i(200,30), gameVar.weapons[WEAPON_BAZOOKA]->weaponName, this, "BUTTON");
 	btn_guns[6] = new CControl(clientRoot, CVector2i(250, 130 + 6 * 40), CVector2i(200,30), gameVar.weapons[WEAPON_PHOTON_RIFLE]->weaponName, this, "BUTTON");
 	btn_guns[7] = new CControl(clientRoot, CVector2i(250, 130 + 7 * 40), CVector2i(200,30), gameVar.weapons[WEAPON_FLAME_THROWER]->weaponName, this, "BUTTON");
+	btn_guns[8] = new CControl(clientRoot, CVector2i(250, 130 + 8 * 40), CVector2i(200, 30), gameVar.weapons[WEAPON_VACUUM]->weaponName, this, "BUTTON");
 	btn_meleeguns[0] = new CControl(clientRoot, CVector2i(475, 130 + 0 * 40), CVector2i(200,30), gameVar.weapons[WEAPON_KNIVES]->weaponName, this, "BUTTON");
 	btn_meleeguns[1] = new CControl(clientRoot, CVector2i(475, 130 + 1 * 40), CVector2i(200,30), gameVar.weapons[WEAPON_NUCLEAR]->weaponName, this, "BUTTON");
 	btn_meleeguns[2] = new CControl(clientRoot, CVector2i(475, 130 + 2 * 40), CVector2i(200,30), gameVar.weapons[WEAPON_SHIELD]->weaponName, this, "BUTTON");
@@ -671,6 +672,16 @@ void Client::Click(CControl * control)
 	{
 		currentGun = btn_guns[7];
 		game->thisPlayer->nextSpawnWeapon = WEAPON_FLAME_THROWER;
+		if (game->thisPlayer->teamID != PLAYER_TEAM_SPECTATOR)
+		{
+			showMenu = false;
+		}
+		return;
+	}
+	if (control == btn_guns[8])
+	{
+		currentGun = btn_guns[8];
+		game->thisPlayer->nextSpawnWeapon = WEAPON_VACUUM;
 		if (game->thisPlayer->teamID != PLAYER_TEAM_SPECTATOR)
 		{
 			showMenu = false;

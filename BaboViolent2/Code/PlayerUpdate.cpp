@@ -156,6 +156,25 @@ void Player::update(float delay)
 				weapon->fullReload = false;
 			}
 		}
+
+		if (weapon->fullReload && weapon->weaponID == WEAPON_VACUUM)
+		{
+			if (weapon->shotInc > 0)
+			{
+				// si ca fait un sizieme du temps alloué pour reloader
+				if ((int)(weapon->currentFireDelay / 3 * 100) % 17 == 0)
+				{
+					weapon->shotInc--;
+#ifndef CONSOLE
+					dksPlay3DSound(scene->client->sfxShotyReload, -1, 5, currentCF.position, 230);
+#endif
+				}
+			}
+			else
+			{
+				weapon->fullReload = false;
+			}
+		}
 	}
 
 #ifndef CONSOLE
