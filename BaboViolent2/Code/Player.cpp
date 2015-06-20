@@ -260,12 +260,17 @@ void Player::kill(bool silenceDeath)
 #endif
 		
 		//--- Spawn some gibs :D
-	/*	for (int i=0;i<10;++i)
+		if (game->gameType == GAME_TYPE_SQUIRREL)
 		{
-			if (game) game->douilles.push_back(new Douille(currentCF.position, 
-				rand(CVector3f(-2.5,-2.5,1),CVector3f(2.5,2.5,2.5)), 
-				CVector3f(1,0,0), DOUILLE_TYPE_GIB));
-		}*/
+			if (this->teamID == PLAYER_TEAM_RED)
+			{
+				for (int i=0;i<30;++i)
+				{
+					if (game) game->douilles.push_back(new Douille(currentCF.position,
+					rand(CVector3f(-5.5,-5.5,5),CVector3f(5.5,5.5,5.5)),CVector3f(1,0,0), DOUILLE_TYPE_GIB));
+				}
+			}
+		}
 	}
 #endif
 
@@ -502,6 +507,14 @@ void Player::render()
 
 				float size = gameVar.cl_glowSize;
 				CVector3f a,b,c,d;
+
+				if (teamID == PLAYER_TEAM_RED)
+				{
+					if (game->gameType == GAME_TYPE_SQUIRREL)
+					{
+						size *= 1.2f; 
+					}
+				}
 				a =  (right + up) * -size;
 				b =  (right - up) * size;
 				c =  (right + up) * size;
@@ -592,7 +605,22 @@ void Player::render()
 				glColor3f(1,1,1);
 				glPolygonMode(GL_FRONT, GL_FILL);
 				gluQuadricTexture(qObj, true);
-				gluSphere(qObj, .25f, 16, 16);
+
+				if (game->gameType == GAME_TYPE_SQUIRREL)
+				{
+					if (teamID == PLAYER_TEAM_RED)
+					{
+						gluSphere(qObj, .35f, 16, 16);
+					}
+					else
+					{
+						gluSphere(qObj, .25f, 16, 16);
+					}
+				}
+				else
+				{
+					gluSphere(qObj, .25f, 16, 16);
+				}
 
 				//--- On pogne la position sur l'�ran
 				CVector3f screenPos = dkglProject(CVector3f(0,0,0));
@@ -607,7 +635,21 @@ void Player::render()
 				glPolygonMode(GL_FRONT, GL_FILL);
 				glTranslatef(currentCF.position[0], currentCF.position[1], 0);
 				glRotatef(currentCF.angle, 0, 0, 1);
-				glScalef(0.005f, 0.005f, 0.005f);
+				if (game->gameType == GAME_TYPE_SQUIRREL)
+				{
+					if (teamID == PLAYER_TEAM_RED)
+					{
+						glScalef(0.007f, 0.007f, 0.007f);
+					}
+					else
+					{
+						glScalef(0.005f, 0.005f, 0.005f);
+					}
+				}
+				else
+				{
+					glScalef(0.005f, 0.005f, 0.005f);
+				}
 				if (weapon) weapon->render();
 				if (meleeWeapon)
 				{
@@ -882,9 +924,17 @@ void Player::spawn(const CVector3f & spawnPoint)
 	nbGrenadeLeft = 2;
 	nbMolotovLeft = 1;
 
-
-	switchWeapon(nextSpawnWeapon);
-	switchMeleeWeapon(nextMeleeWeapon);
+	if ((game->gameType == GAME_TYPE_SQUIRREL) && (teamID == PLAYER_TEAM_RED))
+	{
+		life = 2;
+		switchWeapon(WEAPON_FLAME_THROWER);
+		switchMeleeWeapon(WEAPON_KNIVES);
+	}
+	else
+	{
+		switchWeapon(nextSpawnWeapon);
+		switchMeleeWeapon(nextMeleeWeapon);
+	}
 
 	//--- Si c'est nous on force la camera dessus
 #ifndef CONSOLE
@@ -939,10 +989,16 @@ void Player::switchWeapon(int newWeaponID, bool forceSwitch)
 	// Bon testing, on va lui refiler un gun
 	ZEVEN_SAFE_DELETE(weapon);
 	weapon = new Weapon(gameVar.weapons[newWeaponID]);
-	weapon->currentFireDelay = 1; // On a une 1sec de delait quand on switch de gun
+	weapon->currentFireDelay = 1; // On a une 1sec de delai quand on switch de gun
 	weapon->m_owner = this;
 
-	gameVar.cl_primaryWeapon = newWeaponID;
+	if ((game->gameType == GAME_TYPE_SQUIRREL) && (teamID == PLAYER_TEAM_RED))
+	{
+	}
+	else
+	{
+		gameVar.cl_primaryWeapon = newWeaponID;
+	}
 
 	// On entends �
 #ifndef CONSOLE

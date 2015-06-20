@@ -26,9 +26,9 @@
 #ifdef _PRO_
 	#include "ChecksumQuery.h"
 	#include <vector>
-   #define GAME_VERSION_SV 21100
+   #define GAME_VERSION_SV 31100
 #else
-   #define GAME_VERSION_SV 21000
+   #define GAME_VERSION_SV 31000
 #endif
 
 #define GAME_UPDATE_DELAY 20

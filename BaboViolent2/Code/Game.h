@@ -232,7 +232,7 @@ struct Douille
 		}
 		else if (type == DOUILLE_TYPE_GIB)
 		{
-			delay = 2; // 5 sec haha malade
+			delay = 4; // 5 sec haha malade
 		}
 		position = pPosition;
 		soundPlayed = false;

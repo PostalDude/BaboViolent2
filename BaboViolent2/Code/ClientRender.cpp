@@ -257,17 +257,22 @@ void Client::render(float & alphaScope)
 					glDisable(GL_TEXTURE_2D);
 
 					// On affiche sa vie à droite
+					float nAddSizeY = 1;
+					if ((game->gameType == GAME_TYPE_SQUIRREL) && (game->thisPlayer->teamID == PLAYER_TEAM_RED))
+					{
+						nAddSizeY = 2;
+					}
 					glBegin(GL_QUADS);
 						glColor3f(1,1,1);
-						glVertex2f(760, 390);
+						glVertex2f(760, 390 / nAddSizeY);
 						glVertex2f(760, 589);
 						glVertex2f(789, 589);
-						glVertex2f(789, 390);
+						glVertex2f(789, 390 / nAddSizeY);
 						glColor3f(0,0,0);
-						glVertex2f(762, 392);
+						glVertex2f(762, 392 / nAddSizeY);
 						glVertex2f(762, 587);
 						glVertex2f(787, 587);
-						glVertex2f(787, 392);
+						glVertex2f(787, 392 / nAddSizeY);
 						// La couleur celon sa vie
 						if (game->thisPlayer->life > .25f || blink < .25f)
 						{
@@ -565,21 +570,20 @@ void Client::render(float & alphaScope)
 				case GAME_TYPE_SQUIRREL:
 					// Total Time left
 					printLeftText(5, 5, 64, CString("%01i:%02i", (int)((game->gameTimeLeft + 1) / 60), (int)(game->gameTimeLeft + 1) % 60));
-					// win left
-					//*** Print squirrel name
-					if (game->blueWin >= game->redWin)
+					// Score left
+					if (game->blueScore >= game->redScore)
 					{
 						renderTexturedQuad(5, 5 + 64, 64, 64, tex_blueFlag);
-						printLeftText(5 + 64 + 5, 5 + 64, 64, CString("%i/%i", game->blueWin, gameVar.sv_winLimit));
+						printLeftText(5 + 64 + 5, 5 + 64, 64, CString("%i/%i", game->blueScore, gameVar.sv_scoreLimit));
 						renderTexturedQuad(5, 5 + 64 + 64, 64, 64, tex_redFlag);
-						printLeftText(5 + 64 + 5, 5 + 64 + 64, 64, CString("%i/%i", game->redWin, gameVar.sv_winLimit));
+						printLeftText(5 + 64 + 5, 5 + 64 + 64, 64, CString("%i/%i", game->redScore, gameVar.sv_scoreLimit));
 					}
 					else
 					{
 						renderTexturedQuad(5, 5 + 64, 64, 64, tex_redFlag);
-						printLeftText(5 + 64 + 5, 5 + 64, 64, CString("%i/%i", game->redWin, gameVar.sv_winLimit));
+						printLeftText(5 + 64 + 5, 5 + 64, 64, CString("%i/%i", game->redScore, gameVar.sv_scoreLimit));
 						renderTexturedQuad(5, 5 + 64 + 64, 64, 64, tex_blueFlag);
-						printLeftText(5 + 64 + 5, 5 + 64 + 64, 64, CString("%i/%i", game->blueWin, gameVar.sv_winLimit));
+						printLeftText(5 + 64 + 5, 5 + 64 + 64, 64, CString("%i/%i", game->blueScore, gameVar.sv_scoreLimit));
 					}
 					break;
 				}

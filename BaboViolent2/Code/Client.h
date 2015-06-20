@@ -20,9 +20,9 @@
 #define CLIENT_H
 
 #ifdef _PRO_
-#define GAME_VERSION_CL 21100
+#define GAME_VERSION_CL 31100
 #else
-#define GAME_VERSION_CL 21000
+#define GAME_VERSION_CL 31000
 #endif
 
 #define MIN_TIME_BETWEEN_QMSG 0.9f
