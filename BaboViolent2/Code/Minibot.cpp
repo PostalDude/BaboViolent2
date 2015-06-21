@@ -68,71 +68,86 @@ void CMiniBot::Think(float delay)
 	m_moveRate -= delay;
 
 	//--- At all time, get the closest enemy player and shoot him!
-	Player * closest = 0;
+	Player * closest[2] = { 0 };
 	float closestDis = 10000;
+	int closestIdx = 0;
 	CVector3f p1;
 	CVector3f p2;
 	CVector3f normal;
 	for (i=0;i<MAX_PLAYER;++i)
 	{
+		
 		if (game->players[i])
 		{
 			if (game->players[i]->status == PLAYER_STATUS_ALIVE)
 			{
-				//--- Ennemy team?
-				/*if (game->players[i] != owner && (
-					game->players[i]->teamID != owner->teamID || game->gameType == GAME_TYPE_DM || game->gameType == GAME_TYPE_SND)
-					)*/
+				//--- Close enough?
+				float disWithEnnemySqr = distanceSquared(currentCF.position, game->players[i]->currentCF.position);
+				if (disWithEnnemySqr < 6 * 6)
 				{
-					//--- Close enough?
-					float disWithEnnemySqr = 
-						distanceSquared(currentCF.position, game->players[i]->currentCF.position);
-					if (disWithEnnemySqr < 6 * 6)
+					if (disWithEnnemySqr < closestDis)
 					{
-						if (disWithEnnemySqr < closestDis)
+						p1 = currentCF.position;
+						p2 = game->players[i]->currentCF.position;
+						CVector3f shootDir = p2 - p1;
+						normalize(shootDir);
+						CVector3f z = CVector3f(0,0,1);
+						CVector3f mountOffset = rotateAboutAxis(shootDir,-90,z);
+						normalize(mountOffset);
+						mountOffset *= 0.1f;
+						CVector3f origin = p1 + mountOffset;
+						if (!game->map->rayTest(origin, p2, normal))
 						{
-							p1 = currentCF.position;
-							p2 = game->players[i]->currentCF.position;
-							CVector3f shootDir = p2 - p1;
-							normalize(shootDir);
-							CVector3f z = CVector3f(0,0,1);
-							CVector3f mountOffset = rotateAboutAxis(shootDir,-90,z);
-							normalize(mountOffset);
-							mountOffset *= 0.1f;
-							CVector3f origin = p1 + mountOffset;
-							if (!game->map->rayTest(origin, p2, normal))
-							{
+							if (game->players[i] != owner)
+							{						
 								closestDis = disWithEnnemySqr;
-								closest = game->players[i];
+							}
+							closest[closestIdx] = game->players[i];
+							++closestIdx;
+							if (closestIdx > 1)
+							{
+								break;
 							}
 						}
 					}
+					
 				}
 			}
 		}
 	}
 
-	if (m_moveRate <= 0 && closest)
+	int selectedId = 0;
+	if (closestIdx > 1)
 	{
-	//	if (closest->playerID != owner->playerID)
+		// Select the one which isn't owner
+		if (closest[selectedId] == owner)
 		{
-			CVector3f shootDir = closest->currentCF.position - currentCF.position;
+			selectedId = 1;
+		}
+	}
+
+
+	if (m_moveRate <= 0 && closest)
+	{	
+		if (closest[selectedId])
+		{
+			CVector3f shootDir = closest[selectedId]->currentCF.position - currentCF.position;
 			normalize(shootDir);
 			currentCF.vel += shootDir * 0.8f;
 		}
 		m_moveRate = 0.05f;
 	}
-
-	if (m_fireRate <= 0 && closest)
+	
+	if (m_fireRate <= 0 && closest[selectedId])
 	{
-		if (closest->playerID != this->owner->playerID)
+		if (closest[selectedId]->playerID != this->owner->playerID)
 		{
 			m_fireRate = 0.2f;
 
-			currentCF.mousePosOnMap = closest->currentCF.position;
+			currentCF.mousePosOnMap = closest[selectedId]->currentCF.position;
 
 			//--- Shoot him!!!
-			CVector3f shootDir = closest->currentCF.position - currentCF.position;
+			CVector3f shootDir = closest[selectedId]->currentCF.position - currentCF.position;
 			normalize(shootDir);
 			CVector3f z = CVector3f(0, 0, 1);
 			CVector3f mountOffset = rotateAboutAxis(shootDir, -90, z);

@@ -1051,7 +1051,7 @@ void Player::hit(Weapon * fromWeapon, Player * from, CVector3f& dir, float damag
 		// On check si c'est ff, ou reflect, etc
 		if (from->teamID == teamID && game->gameType != GAME_TYPE_DM && game->gameType != GAME_TYPE_SND)
 		{
-			if (gameVar.sv_friendlyFire || from->playerID == playerID || game->gameType == GAME_TYPE_DM)
+			if ((fromWeapon->weaponID == WEAPON_MINIBOT) || (from->weapon->weaponID == WEAPON_MINIBOT_WEAPON) || (gameVar.sv_friendlyFire || from->playerID == playerID || game->gameType == GAME_TYPE_DM))
 			{
 				dksPlay3DSound(gameVar.sfx_hit[rand()%2], -1, 5, currentCF.position, 255);
 				game->spawnBlood(currentCF.position, cdamage);
@@ -1295,7 +1295,7 @@ void Player::hitSV(Weapon * fromWeapon, Player * from, CVector3f& inDir, float d
 		// On check si c'est ff, ou reflect, etc
 		if (from->teamID == teamID && game->gameType != GAME_TYPE_DM && game->gameType != GAME_TYPE_SND)
 		{
-			if ((fromWeapon->weaponID == WEAPON_MINIBOT_WEAPON) || (gameVar.sv_friendlyFire || from->playerID == playerID || game->gameType == GAME_TYPE_DM || game->gameType == GAME_TYPE_SND))
+			if ((fromWeapon->weaponID == WEAPON_MINIBOT) ||(fromWeapon->weaponID == WEAPON_MINIBOT_WEAPON) || (gameVar.sv_friendlyFire || from->playerID == playerID || game->gameType == GAME_TYPE_DM || game->gameType == GAME_TYPE_SND))
 			{
 				if (from != this)
 					from->dmg += (cdamage<life)?cdamage:life;
