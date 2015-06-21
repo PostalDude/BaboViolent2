@@ -832,7 +832,8 @@ void Server::recvPacket(char * buffer, int typeID, unsigned long bbnetID)
 							vel[2] = (float)playerCoordFrame.vel[2] / 10.0f;
 
 							//console->add( CString( "vel : %f  %f  %f" , vel[0] , vel[1] , vel[2] ), true );
-							float maxVelocity = PLAYER_MAX_VELOCITY+0.1f;
+							// Because of recoil pull/push, removed hack protection, anyway, the server code sucks ass and you can cheat in so many other ways!
+/*							float maxVelocity = PLAYER_MAX_VELOCITY+0.1f; 
 							if (this->game->gameType == GAME_TYPE_SQUIRREL)
 							{
 								if (game->players[playerCoordFrame.playerID]->teamID == PLAYER_TEAM_RED)
@@ -868,7 +869,7 @@ void Server::recvPacket(char * buffer, int typeID, unsigned long bbnetID)
 									return;
 								}
 							}
-							else
+							else*/
 							{
 								//--- Reset hacking count
 								game->players[playerCoordFrame.playerID]->speedHackCount = 0;

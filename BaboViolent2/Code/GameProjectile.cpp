@@ -457,10 +457,10 @@ void Projectile::update(float delay, Map* map)
 		float speed = currentCF.vel.length();
 		if (projectileType == PROJECTILE_ROCKET)
 		{
-			if (speed > 10) // 10 = fast enough :P
+			if (speed > 20) // 10 = fast enough :P
 			{
 				currentCF.vel /= speed;
-				speed = 10;
+				speed = 20;
 				currentCF.vel *= speed;
 			}
 
@@ -468,7 +468,7 @@ void Projectile::update(float delay, Map* map)
 			currentCF.position += currentCF.vel * delay;
 
 			// On incrémente la vel, la rocket à fuse en sale! (accélération exponentiel!)
-			currentCF.vel += currentCF.vel * delay * 3;
+			currentCF.vel += currentCF.vel * delay * 6;
 		}
 
 		if (projectileType == PROJECTILE_COCKTAIL_MOLOTOV)
@@ -721,7 +721,7 @@ void Projectile::update(float delay, Map* map)
 		}
 		else
 		{
-			gameVar.weapons[WEAPON_BAZOOKA]->damage = 0.75f;
+			gameVar.weapons[WEAPON_BAZOOKA]->damage = 0.85f;
 		}
 		if (map && projectileType == PROJECTILE_ROCKET && !remoteEntity && !needToBeDeleted)
 		{

@@ -1041,7 +1041,7 @@ void Player::switchMeleeWeapon(int newWeaponID, bool forceSwitch)
 //
 // Si on se fait toucher !
 //
-void Player::hit(Weapon * fromWeapon, Player * from, float damage)
+void Player::hit(Weapon * fromWeapon, Player * from, CVector3f& dir, float damage)
 {
 	float cdamage = life - damage; // La diff�ence :) (boom headshot)
 	if (damage == -1) cdamage = fromWeapon->damage; // C'est pus possible �
@@ -1071,7 +1071,7 @@ void Player::hit(Weapon * fromWeapon, Player * from, float damage)
 			}
 			if (gameVar.sv_reflectedDamage && from->playerID != playerID) 
 			{
-				from->hit(fromWeapon, from, damage);
+				from->hit(fromWeapon, from, dir, damage);
 			}
 
 			// Oups, on cr�e?
@@ -1202,7 +1202,7 @@ void Player::hit(Weapon * fromWeapon, Player * from, float damage)
 //
 // Ici c'est pour �iter de faire des sons pis toute, vu qu'on est le server
 //
-void Player::hitSV(Weapon * fromWeapon, Player * from, float damage)
+void Player::hitSV(Weapon * fromWeapon, Player * from, CVector3f& inDir, float damage)
 {
 	float cdamage = damage;
 	if (damage == -1) 
@@ -1308,14 +1308,14 @@ void Player::hitSV(Weapon * fromWeapon, Player * from, float damage)
 				playerHit.playerID = playerID;
 				playerHit.fromID = (char)from->playerID;
 				playerHit.weaponID = fromWeapon->weaponID;
-				playerHit.vel[0] = 0;
-				playerHit.vel[1] = 0;
-				playerHit.vel[2] = 1;
+				playerHit.vel[0] = (char)((inDir[0] * playerHit.damage * 100) / 10.0f);
+				playerHit.vel[1] = (char)((inDir[1] * playerHit.damage * 100) / 10.0f);
+				playerHit.vel[2] = (char)((inDir[2] * playerHit.damage * 100) / 10.0f);
 				bb_serverSend((char*)&playerHit,sizeof(net_svcl_player_hit),NET_SVCL_PLAYER_HIT,0);
 			}
 			if (gameVar.sv_reflectedDamage && from->playerID != playerID) 
 			{
-					from->hitSV(fromWeapon, from, cdamage);
+				from->hitSV(fromWeapon, from, inDir, cdamage);
 			}
 
 			// Oups, on cr�e?
@@ -1461,9 +1461,13 @@ void Player::hitSV(Weapon * fromWeapon, Player * from, float damage)
 			playerHit.playerID = playerID;
 			playerHit.fromID = (char)from->playerID;
 			playerHit.weaponID = fromWeapon->weaponID;
-			playerHit.vel[0] = 0;
-			playerHit.vel[1] = 0;
-			playerHit.vel[2] = 1;
+			playerHit.vel[0] = (char)((inDir[0] * playerHit.damage * 100) / 10.0f);
+			playerHit.vel[1] = (char)((inDir[1] * playerHit.damage * 100) / 10.0f);
+			playerHit.vel[2] = (char)((inDir[2] * playerHit.damage * 100) / 10.0f);
+			/*			if (fromWeapon->weaponID == WEAPON_VACUUM)
+			{
+				playerHit.vel = 
+			}*/
 			bb_serverSend((char*)&playerHit,sizeof(net_svcl_player_hit),NET_SVCL_PLAYER_HIT,0);
 
 			// Oups, on cr�e?

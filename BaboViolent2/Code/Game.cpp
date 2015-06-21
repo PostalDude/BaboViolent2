@@ -422,7 +422,11 @@ void Game::update(float delay)
 											p3 = players[i]->p2; // Full length
 
 											// On décrémente sa vie
-											hitPlayer->hitSV(gameVar.weapons[WEAPON_PHOTON_RIFLE], players[i], gameVar.weapons[WEAPON_PHOTON_RIFLE]->damage / 2.0f);
+											CVector3f dir;
+											dir[0] = 0;
+											dir[1] = 0;
+											dir[2] = 1;
+											hitPlayer->hitSV(gameVar.weapons[WEAPON_PHOTON_RIFLE], players[i], dir, gameVar.weapons[WEAPON_PHOTON_RIFLE]->damage / 2.0f);
 										}
 									}
 								}
@@ -1358,7 +1362,7 @@ void Game::shootMinibotSV(CMiniBot * minibot, float imp, CVector3f p1, CVector3f
 		playerShootSV.weaponID = WEAPON_MINIBOT_WEAPON;
 
 		// On décrémente sa vie
-		hitPlayer->hitSV(gameVar.weapons[WEAPON_MINIBOT], players[minibot->owner->playerID]);
+		hitPlayer->hitSV(gameVar.weapons[WEAPON_MINIBOT], players[minibot->owner->playerID], dir);
 	}
 	else
 	{
@@ -1594,7 +1598,7 @@ void Game::shootSV(int playerID, int nuzzleID, float imp, CVector3f p1, CVector3
 							normalize(normal);
 
 							// On décrémente sa vie
-							hitPlayer->hitSV(gameVar.weapons[player->weapon->weaponID], player, gameVar.weapons[player->weapon->weaponID]->damage);
+							hitPlayer->hitSV(gameVar.weapons[player->weapon->weaponID], player, normal, gameVar.weapons[player->weapon->weaponID]->damage);
 						}
 					}
 				}
@@ -1650,8 +1654,11 @@ void Game::shootSV(int playerID, int nuzzleID, float imp, CVector3f p1, CVector3
 			playerShootSV.hitPlayerID = hitPlayer->playerID;
 			playerShootSV.weaponID = player->weapon->weaponID;
 
+			CVector3f dir = p2 - p1;
+			normalize(dir);
+
 			// On décrémente sa vie
-			hitPlayer->hitSV(gameVar.weapons[playerShootSV.weaponID], players[player->playerID]);
+			hitPlayer->hitSV(gameVar.weapons[playerShootSV.weaponID], players[player->playerID], dir);
 		}
 		else
 		{
@@ -1717,7 +1724,7 @@ void Game::radiusHit(CVector3f & pos, float radius, char fromID, char weaponID, 
 						playerHit.vel[1] = (char)((dir[1] * playerHit.damage * 10) / 10.0f);
 						playerHit.vel[2] = (char)((dir[2] * playerHit.damage * 10) / 10.0f);
 						bb_serverSend((char*)&playerHit,sizeof(net_svcl_player_hit),NET_SVCL_PLAYER_HIT,0);*/
-						player->hitSV(gameVar.weapons[weaponID], players[fromID], ((sameDmg)?1:(1 - (dis / radius))) * gameVar.weapons[weaponID]->damage);
+						player->hitSV(gameVar.weapons[weaponID], players[fromID], dir, ((sameDmg)?1:(1 - (dis / radius))) * gameVar.weapons[weaponID]->damage);
 					}
 				}
 			}

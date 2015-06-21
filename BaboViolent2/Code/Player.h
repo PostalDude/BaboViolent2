@@ -476,9 +476,9 @@ public:
 
 	// Si on se fait toucher !
 #ifndef CONSOLE
-	void hit(Weapon * fromWeapon, Player * from, float damage=-1);
+	void hit(Weapon * fromWeapon, Player * from, CVector3f& dir, float damage = -1);
 #endif
-	void hitSV(Weapon * fromWeapon, Player * from, float damage=-1);
+	void hitSV(Weapon * fromWeapon, Player * from, CVector3f& dir, float damage = -1);
 
 	// Pour changer son gun!
 	void switchWeapon(int newWeaponID, bool forceSwitch=false);

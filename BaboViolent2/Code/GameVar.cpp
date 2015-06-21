@@ -289,7 +289,7 @@ GameVar::GameVar()
 	weapons[WEAPON_SNIPER] = new Weapon("main/models/Sniper.DKO", "main/sounds/Sniper.wav", 2.0f, gameVar.lang_sniper.s,
 		.30f, 0, 1, 3.0f, 0, WEAPON_SNIPER, PROJECTILE_DIRECT);
 	weapons[WEAPON_BAZOOKA] = new Weapon("main/models/Bazooka.DKO", "main/sounds/Bazooka.wav", 1.75f, lang_bazooka,
-		.75f, 0, 1, 3.0f, 0, WEAPON_BAZOOKA, PROJECTILE_ROCKET);
+		.85f, 0, 1, 50.0f, 0, WEAPON_BAZOOKA, PROJECTILE_ROCKET);
 	weapons[WEAPON_GRENADE] = new Weapon("main/models/Hand.DKO", "main/sounds/Grenade.wav", 1.0f, gameVar.lang_grenade.s,
 		1.5f, 0, 1, -1.0f, 0, WEAPON_GRENADE, PROJECTILE_GRENADE);
 	weapons[WEAPON_COCKTAIL_MOLOTOV] = new Weapon("main/models/Hand.DKO", "main/sounds/Grenade.wav", 1.0f, "Flame",
@@ -305,7 +305,7 @@ GameVar::GameVar()
 	weapons[WEAPON_SHIELD] = new Weapon("main/models/Shield.DKO", "main/sounds/shield.wav", 3.0f, "Instant Shield",
 		0, 0, 1, 0, 0, WEAPON_SHIELD, PROJECTILE_NONE);
 	#ifdef _PRO_
-		weapons[WEAPON_MINIBOT] = new Weapon("main/models/Antena.DKO", "main/sounds/equip.wav", 1.0f, "Mini Bot",
+		weapons[WEAPON_MINIBOT] = new Weapon("main/models/Antena.DKO", "main/sounds/equip.wav", 1.0f, "Buddy Bot",
 			.03f, 0, 1, 0, 0, WEAPON_MINIBOT, PROJECTILE_NONE);
 	#endif
 #else
@@ -322,7 +322,7 @@ GameVar::GameVar()
 	weapons[WEAPON_SNIPER] = new Weapon("", "", 2.0f,"Sniper Rifle",
 		.30f, 0, 1, 3.0f, 0, WEAPON_SNIPER, PROJECTILE_DIRECT);
 	weapons[WEAPON_BAZOOKA] = new Weapon("", "", 1.75f, "Bazooka",
-		.75f, 0, 1, 3.0f, 0, WEAPON_BAZOOKA, PROJECTILE_ROCKET);
+		.85f, 0, 1, 3.0f, 0, WEAPON_BAZOOKA, PROJECTILE_ROCKET);
 	weapons[WEAPON_GRENADE] = new Weapon("", "", 1.0f, "Grenade",
 		1.5f, 0, 1, -1.0f, 0, WEAPON_GRENADE, PROJECTILE_GRENADE);
 	weapons[WEAPON_COCKTAIL_MOLOTOV] = new Weapon("", "", 1.0f, "Flame",

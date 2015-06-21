@@ -866,7 +866,14 @@ void Client::recvPacket(char * buffer, int typeID)
 						vel[0] = (float)playerHit.vel[0] / 10.0f;
 						vel[1] = (float)playerHit.vel[1] / 10.0f;
 						vel[2] = (float)playerHit.vel[2] / 10.0f;
-						game->thisPlayer->currentCF.vel += vel;
+						if (game->players[playerHit.fromID]->weapon->weaponID == WEAPON_VACUUM)
+						{
+							game->thisPlayer->currentCF.vel -= vel;
+						}
+						else
+						{
+							game->thisPlayer->currentCF.vel += vel;
+						}
 						// moved here from GameSpawn.cpp
 						if((playerHit.weaponID == WEAPON_BAZOOKA) ||
 							(playerHit.weaponID == WEAPON_GRENADE) ||
@@ -878,7 +885,11 @@ void Client::recvPacket(char * buffer, int typeID)
 						}
 					}
 				}
-				game->players[playerHit.playerID]->hit(gameVar.weapons[playerHit.weaponID], game->players[playerHit.fromID], playerHit.damage);
+				CVector3f dir;
+				dir[0] = (float)playerHit.vel[0] / 10.0f;
+				dir[1] = (float)playerHit.vel[1] / 10.0f;
+				dir[2] = (float)playerHit.vel[2] / 10.0f;
+				game->players[playerHit.playerID]->hit(gameVar.weapons[playerHit.weaponID], game->players[playerHit.fromID], dir, playerHit.damage);
 			}
 			break;
 		}
