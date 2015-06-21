@@ -932,7 +932,14 @@ void Projectile::update(float delay, Map* map)
 			{
 				// On lui donne de la vie yייי
 				playerInRadius->life += .5f;
-				if (playerInRadius->life > 1) playerInRadius->life = 1;
+				if ((scene->server->game->gameType == GAME_TYPE_SQUIRREL) && (playerInRadius->teamID == PLAYER_TEAM_RED))
+				{
+					if (playerInRadius->life > 2) playerInRadius->life = 2;
+				}
+				else
+				{
+					if (playerInRadius->life > 1) playerInRadius->life = 1;
+				}
 				needToBeDeleted = true;
 				net_svcl_pickup_item pickupItem;
 				pickupItem.playerID = playerInRadius->playerID;

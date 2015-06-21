@@ -168,6 +168,7 @@ class CMiniBot
 {
 public:
 	bool nukeBot;
+	bool kill;
 	// Ses coord frames
 	CoordFrame currentCF; // Celui qu'on affiche
 	CoordFrame lastCF; // Le key frame de sauvegarde du frame courant

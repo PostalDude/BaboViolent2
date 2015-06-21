@@ -29,6 +29,7 @@
 //
 CMiniBot::CMiniBot()
 {
+	kill = false;
 	nukeBot = false;
 	cFProgression = 0;
 	m_seekingTime = 5;
@@ -59,6 +60,11 @@ void CMiniBot::MakeNukeBot()
 }
 void CMiniBot::Think(float delay)
 {
+	if (kill)
+	{
+		return;
+	}
+
 	int i;
 
 	//--- Distance from him to us, always keep that

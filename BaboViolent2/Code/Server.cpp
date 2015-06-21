@@ -1183,20 +1183,28 @@ void Server::update(float delay)
 									//--- Mini bot?
 									if (game->players[j]->minibot)
 									{
-										minibotCoordFrame.playerID = (char)j;
-										minibotCoordFrame.babonetID = game->players[j]->babonetID;
-										minibotCoordFrame.frameID = game->players[j]->currentCF.frameID;
-										minibotCoordFrame.mousePos[0] = (short)(game->players[j]->minibot->currentCF.mousePosOnMap[0] * 100);
-										minibotCoordFrame.mousePos[1] = (short)(game->players[j]->minibot->currentCF.mousePosOnMap[1] * 100);
-										minibotCoordFrame.mousePos[2] = (short)(game->players[j]->minibot->currentCF.mousePosOnMap[2] * 100);
-										minibotCoordFrame.position[0] = (short)(game->players[j]->minibot->currentCF.position[0] * 100);
-										minibotCoordFrame.position[1] = (short)(game->players[j]->minibot->currentCF.position[1] * 100);
-										minibotCoordFrame.position[2] = (short)(game->players[j]->minibot->currentCF.position[2] * 100);
-										minibotCoordFrame.vel[0] = (char)(game->players[j]->minibot->currentCF.vel[0] * 10);
-										minibotCoordFrame.vel[1] = (char)(game->players[j]->minibot->currentCF.vel[1] * 10);
-										minibotCoordFrame.vel[2] = (char)(game->players[j]->minibot->currentCF.vel[2] * 10);
-										
-										bb_serverSend((char*)&minibotCoordFrame, sizeof(net_svcl_minibot_coord_frame), NET_SVCL_MINIBOT_COORD_FRAME, game->players[i]->babonetID, NET_UDP);
+										if (game->players[j]->minibot->kill)
+										{
+											delete game->players[j]->minibot;
+											game->players[j]->minibot = NULL;
+										}
+										else
+										{
+											minibotCoordFrame.playerID = (char)j;
+											minibotCoordFrame.babonetID = game->players[j]->babonetID;
+											minibotCoordFrame.frameID = game->players[j]->currentCF.frameID;
+											minibotCoordFrame.mousePos[0] = (short)(game->players[j]->minibot->currentCF.mousePosOnMap[0] * 100);
+											minibotCoordFrame.mousePos[1] = (short)(game->players[j]->minibot->currentCF.mousePosOnMap[1] * 100);
+											minibotCoordFrame.mousePos[2] = (short)(game->players[j]->minibot->currentCF.mousePosOnMap[2] * 100);
+											minibotCoordFrame.position[0] = (short)(game->players[j]->minibot->currentCF.position[0] * 100);
+											minibotCoordFrame.position[1] = (short)(game->players[j]->minibot->currentCF.position[1] * 100);
+											minibotCoordFrame.position[2] = (short)(game->players[j]->minibot->currentCF.position[2] * 100);
+											minibotCoordFrame.vel[0] = (char)(game->players[j]->minibot->currentCF.vel[0] * 10);
+											minibotCoordFrame.vel[1] = (char)(game->players[j]->minibot->currentCF.vel[1] * 10);
+											minibotCoordFrame.vel[2] = (char)(game->players[j]->minibot->currentCF.vel[2] * 10);
+
+											bb_serverSend((char*)&minibotCoordFrame, sizeof(net_svcl_minibot_coord_frame), NET_SVCL_MINIBOT_COORD_FRAME, game->players[i]->babonetID, NET_UDP);
+										}
 									}
 								}
 #endif

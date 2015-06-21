@@ -1163,7 +1163,14 @@ void Client::recvPacket(char * buffer, int typeID)
 				{
 				case ITEM_LIFE_PACK:
 					game->players[pickupItem.playerID]->life += .5f;
-					if (game->players[pickupItem.playerID]->life > 1) game->players[pickupItem.playerID]->life = 1;
+					if ((game->gameType == GAME_TYPE_SQUIRREL) && (game->players[pickupItem.playerID]->teamID == PLAYER_TEAM_RED))
+					{
+						if (game->players[pickupItem.playerID]->life > 2) game->players[pickupItem.playerID]->life = 2;
+					}
+					else
+					{
+						if (game->players[pickupItem.playerID]->life > 1) game->players[pickupItem.playerID]->life = 1;
+					}
 					if (game->players[pickupItem.playerID] == game->thisPlayer)
 					{
 						dksPlaySound(gameVar.sfx_lifePack, -1, 255);

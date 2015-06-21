@@ -279,8 +279,10 @@ void Player::kill(bool silenceDeath)
 	//--- Delete minibot
 	if (minibot)
 	{
-		delete minibot;
-		minibot = 0;
+		minibot->kill = 1;
+	//	killMinibotTimer = 4;
+/*		delete minibot;
+		minibot = 0;*/
 	}
 #endif
 
@@ -479,6 +481,14 @@ void Player::render()
 #endif
 #ifdef _PRO_
 				//--- Mini bot shadow :D
+				
+				// Sucks to do that here, but fuck that shit.
+				if (minibot && minibot->kill)
+				{
+					delete minibot;
+					minibot = 0;
+				}
+
 				if (minibot)
 				{
 #ifndef _DX_
@@ -1611,6 +1621,12 @@ void Player::setThisPlayerInfo()
 //
 void Player::setCoordFrame(net_clsv_svcl_player_coord_frame & playerCoordFrame)
 {
+	if (minibot && minibot->kill)
+	{
+		delete minibot;
+		minibot = 0;
+	}
+
 	if (playerID != playerCoordFrame.playerID) return; // Wtf c pas le bon player!? (Pas suposer arriver)
 
 	// On check si ce n'est pas un out of order data
@@ -1659,6 +1675,7 @@ void Player::setCoordFrame(net_clsv_svcl_player_coord_frame & playerCoordFrame)
 void Player::setCoordFrameMinibot(net_svcl_minibot_coord_frame & minibotCoordFrame)
 {
 	if (playerID != minibotCoordFrame.playerID) return; // Wtf c pas le bon player!? (Pas suposer arriver)
+
 
 	
 	//--- Create the minibot if doesn't exist so we don't
